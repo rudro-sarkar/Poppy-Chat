@@ -14,7 +14,7 @@ async function session_route_mgmt(req, res, next) {
 async function session_login_mgmt(req, res, next) {
     try {
         if (req.session.user) {
-            res.redirect('/poppy');
+            res.redirect('/inbox');
         }else {
             next();
         }

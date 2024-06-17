@@ -4,7 +4,7 @@
 <head>
     <%- include("../partials/head.ejs") %>
 
-        <title>Poppy Chat</title>
+        <title>Explore | <%= data.username %></title>
 </head>
 
 <body>
@@ -19,22 +19,28 @@
                 <div class="p-4">
                     <h1 class="text-2xl font-semibold"><span class="text-red-500">Poppy</span> Chat</h1>
                     <ul class="mt-8">
-                        <div class="flex justify-between items-center w-full h-12 rounded bg-gray-700">
+                        <div class="cursor-pointer flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                             &nbsp;
                             <i class="fa-solid fa-inbox"></i>
-                            <li class=""><a href="">Inbox</a></li>
+                            <li class=""><a href="/inbox">Inbox</a></li>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
-                        <div class="flex justify-between items-center w-full h-12 rounded">
+                        <div class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded bg-gray-700">
                             &nbsp;
                             <i class="fa-solid fa-magnifying-glass"></i>
-                            <li class=""><a href="">Explore</a></li>
+                            <li class=""><a href="/explore">Explore</a></li>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
-                        <div class="flex justify-between items-center w-full h-12 rounded">
+                        <div class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+                            &nbsp;
+                            <i class="fa-solid fa-bell"></i>
+                            <li class=""><a href="/requests">Requests</a></li>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                        </div>
+                        <div class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                             &nbsp;
                             <i class="fa-solid fa-gear"></i>
-                            <li class=""><a href="">Settings</a></li>
+                            <li class=""><a href="/settings">Settings</a></li>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
                     </ul>
@@ -54,12 +60,8 @@
                                         d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
                             </button>
-                            <div class="w-2/6 flex justify-around items-center">
-                                <input class="mx-4 w-50 border rounded-md px-4 py-2" type="text" placeholder="Search">
-                                <div class="flex  justify-around items-center w-32 h-8">
-                                    <img class="w-7 h-7 rounded-full" src="/resources/profile_pic.jpg">
-                                    <h1 class="font-semibold"><%= data.name %></h1>
-                                </div>
+                            <div class="w-2/6 flex justify-end items-center">
+                                <input class="mx-4 w-50 border rounded-md px-4 py-2" type="text" placeholder="Search using poppy id">
                             </div>
                         </div>
                     </div>

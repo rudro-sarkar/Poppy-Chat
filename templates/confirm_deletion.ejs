@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("../partials/head.ejs") %>
+
+        <title>Account Deletion | Poppy Chat
+        </title>
+</head>
+
+<body>
+
+    <section class="bg-gray-50">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <a href="/" class="flex items-center mb-6 text-2xl font-semibold text-gray-900">
+                <img class="w-10 h-10 mr-2 rounded-full" src="resources/profile_pic.jpg" alt="logo">
+                <%= msg.name %> - account flagged for deletion
+            </a>
+            <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-800 md:text-2xl">
+                        Delete you Poppy Account
+                    </h1>
+                    <p class="text-red-600">Caution: Account deletion is an irreversible process and can't be undone once deleted. All of your data will be completely wiped out from our database.</p>
+                    <form class="space-y-4 md:space-y-6" method="post" action="/proceedToDeletion">
+                        <div>
+                            <label for="confirmation_text" class="block mb-2 text-sm font-medium text-gray-900">Type "poppy delete <%= msg.name %>"</label>
+                            <input type="text" name="confirmation_text" id="account_identifier" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="poppy delete <poppy_id>" required>
+                        </div>
+                        <div>
+                            <label for="password" class="block mb-2 text-sm font-medium text-gray-900">Enter your account password</label>
+                            <input type="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required>
+                        </div>
+
+                        <button type="submit" class="w-full text-white bg-red-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hover:bg-red-500">Delete Account</button>
+
+                        <p class="font-bold text-red-600">
+                            <% if(msg.error !== ''){ %>
+                                <%= msg.error %>
+                              <% } else{} %>
+                        </p>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+      </section>
+
+
+    <script>
+        
+    </script>
+
+</body>
+
+</html>

@@ -79,20 +79,24 @@ const join = async (req, res) => {
             else if (valid_status == "username_error") { msg = 'Invalid Username.' }
             else if (valid_status == "password_error") { msg = 'Invalid Password.' }
             else if (valid_status == "ready_to_go") { msg = 'ready_to_go' }
-
             if (msg != 'ready_to_go') {
                 res.render('register', { message: msg });
             } else {
-                let poppy_id = poppyid_gen();
-                req.session.user_credentials = {
-                    name: username,
-                    poppy_id: poppy_id,
-                    email: email,
-                    password: password,
-                    verification_code: email_verification_code_gen()
-                }
-                send_verification_mail(req.session.user_credentials.verification_code, req.session.user_credentials.email, req.session.user_credentials.name);
-                res.render('email_verify', { message: '' });
+                let searched_document = await userModel.findOne({email: email});
+                if (searched_document) {
+                    res.render('register', { message: 'A user with this email already exists!' });
+                }else {
+                    let poppy_id = poppyid_gen();
+                    req.session.user_credentials = {
+                        name: username,
+                        poppy_id: poppy_id,
+                        email: email,
+                        password: password,
+                        verification_code: email_verification_code_gen()
+                    }
+                    send_verification_mail(req.session.user_credentials.verification_code, req.session.user_credentials.email, req.session.user_credentials.name);
+                    res.render('email_verify', { message: '' });
+                } 
             }
         } catch (error) {
             console.log(error);

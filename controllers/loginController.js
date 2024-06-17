@@ -23,7 +23,7 @@ const login = async (req, res) => {
             let hash_status = await bcrypt.compare(entered_password, searched_data.password);
             if (hash_status) {
                 req.session.user = searched_data;
-                res.redirect('/poppy');
+                res.redirect('/inbox');
             } else {
                 res.render('login', { message: 'Invalid Credentials!' });
 
@@ -42,12 +42,51 @@ const logout = async (req, res) => {
 }
 
 const loadDashboard = async (req, res) => {
-    res.render('poppy', { data: req.session.user });
+    const data = {
+        username: req.session.user.name,
+        email: req.session.user.email,
+        poppy_id: req.session.user.poppy_id,
+        created_at: req.session.user.createdAt
+    }
+    res.render('inbox', { data });
+}
+
+const loadExplorePage = async (req, res) => {
+    data = {
+        username: req.session.user.name,
+        email: req.session.user.email,
+        poppy_id: req.session.user.poppy_id,
+        created_at: req.session.user.createdAt
+    }
+    res.render('explore', { data });
+}
+
+const loadRequestsPage = async (req, res) => {
+    data = {
+        username: req.session.user.name,
+        email: req.session.user.email,
+        poppy_id: req.session.user.poppy_id,
+        created_at: req.session.user.createdAt
+    }
+    res.render('requests', { data });
+}
+
+const loadSettingsPage = async (req, res) => {
+    data = {
+        username: req.session.user.name,
+        email: req.session.user.email,
+        poppy_id: req.session.user.poppy_id,
+        created_at: req.session.user.createdAt
+    }
+    res.render('settings', { data });
 }
 
 module.exports = {
     loadLoginPage,
     login,
     logout,
-    loadDashboard
+    loadDashboard,
+    loadExplorePage,
+    loadRequestsPage,
+    loadSettingsPage
 }

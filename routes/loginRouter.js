@@ -5,6 +5,7 @@ const loginSession = require("express-session");
 const authMiddeware = require("../middlewares/authMiddle");
 
 const login_controller = require("../controllers/loginController");
+const settings_controller = require("../controllers/settingsController");
 
 login_router.use(loginSession({
     secret: process.env.SECONDARY_SESSION_SECRET,
@@ -19,7 +20,13 @@ login_router.get('/login',authMiddeware.session_login_mgmt, login_controller.loa
 login_router.post('/login', authMiddeware.session_login_mgmt, login_controller.login);
 login_router.post('/logout',authMiddeware.session_route_mgmt,  login_controller.logout);
 
-login_router.get('/poppy', authMiddeware.session_route_mgmt, login_controller.loadDashboard);
+login_router.get('/inbox', authMiddeware.session_route_mgmt, login_controller.loadDashboard);
+login_router.get('/explore', authMiddeware.session_route_mgmt, login_controller.loadExplorePage);
+login_router.get('/requests', authMiddeware.session_route_mgmt, login_controller.loadRequestsPage);
+login_router.get('/settings', authMiddeware.session_route_mgmt, login_controller.loadSettingsPage);
+
+login_router.post('/reqestAccountDeletion', authMiddeware.session_route_mgmt, settings_controller.requstAccDeletion);
+login_router.post('/proceedToDeletion', authMiddeware.session_route_mgmt, settings_controller.proceedAccDeletion);
 
 module.exports = login_router;
 
