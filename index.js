@@ -28,9 +28,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 // Importing & setting up routes
 const basic_router = require("./routes/basicRouter");
 const auth_router = require("./routes/authRouter");
+const login_router = require("./routes/loginRouter");
 
 app.use(basic_router);
 app.use(auth_router);
+app.use(login_router);
 
 // Starting the server
 app.listen(config.port, () => {

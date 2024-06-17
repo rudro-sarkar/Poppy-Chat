@@ -6,7 +6,7 @@ const email_auth = require("../mailer");
 const validator = (email, username, password) => {
     const email_regex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const username_regex = /^[a-z0-9]+$/i;
-    if (!email_regex.test(email)) {
+    if (!email_regex.test(email) || email == "poppychatrealm@gmail.com") {
         return 'email_error';
     } else if (!username_regex.test(username)) {
         return 'username_error';
@@ -28,7 +28,6 @@ const poppyid_gen = () => {
     for (let i = 0; i < 8; i++) {
         username += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-
     return username;
 }
 
@@ -110,21 +109,21 @@ const verify = async (req, res) => {
             let plain_pass = req.session.user_credentials.password;
             let salt_count = 10;
             const hashed_pass = await bcrypt.hash(plain_pass, salt_count);
-            // await userModel.insertMany([
-            //     {
-            //         name: req.session.user_credentials.name,
-            //         poppy_id: req.session.user_credentials.poppy_id,
-            //         email: req.session.user_credentials.email,
-            //         password: hashed_pass
-            //     }
-            // ]);
+            await userModel.insertMany([
+                {
+                    name: req.session.user_credentials.name,
+                    poppy_id: req.session.user_credentials.poppy_id,
+                    email: req.session.user_credentials.email,
+                    password: hashed_pass
+                }
+            ]);
             req.session.destroy();
             res.render('verified');
         } else {
             res.render('email_verify', { message: 'Invalid verification code!' });
         }
     } else {
-        res.render('verified');
+        res.redirect('/join');
     }
 }
 

@@ -1,6 +1,8 @@
 
 const nodemailer = require("nodemailer");
 
+const email_app_pass = process.env.EMAIL_APP_PASSWORD;
+
 // Creating authentication for nodemailer
 const auth = nodemailer.createTransport({
     service: 'gmail',
@@ -8,7 +10,7 @@ const auth = nodemailer.createTransport({
     port: 465,
     auth: {
         user: 'poppychatrealm@gmail.com',
-        pass: 'hxae dpaq roha yoob'
+        pass: email_app_pass
     }
 });
 
