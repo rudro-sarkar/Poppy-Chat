@@ -2,6 +2,7 @@
 // Importing installed modules
 const express = require("express");
 const bodyParser = require("body-parser");
+const http = require("http");
 const path = require("path");
 const dotenv = require("dotenv");
 
@@ -13,8 +14,10 @@ const config = {
     static_path: path.resolve(__dirname, 'public'),
 }
 
-// Establishing database connection
+// Establishing database connection & importing necessary models
 require('./database');
+
+const userModel = require("./models/user");
 
 // Creating an express app instance
 const app = express();
@@ -34,8 +37,28 @@ app.use(basic_router);
 app.use(auth_router);
 app.use(login_router);
 
+// Creating the server
+const server = http.createServer(app);
+
+// Creating & managing socket connections
+const io = require("socket.io")(server);
+
+// Creating general namespace & managing events
+const gsp = io.of('/general'); // general namespace
+
+// Updating user status on connection & disconnect
+gsp.on('connection', async socket => {
+    let userToken = socket.handshake.auth.userToken;
+    // Setting user status online on DB
+    await userModel.findByIdAndUpdate(userToken, { $set: { status: 'online' } });
+    socket.on('disconnect', async () => {
+        // Setting user status offline on DB
+        await userModel.findByIdAndUpdate(userToken, { $set: { status: 'offline' } });
+    });
+});
+
 // Starting the server
-app.listen(config.port, () => {
+server.listen(config.port, () => {
     console.log(`Server is now listening on port ${config.port}`);
 });
 

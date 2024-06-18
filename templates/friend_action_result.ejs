@@ -66,11 +66,6 @@
                                 </svg>
                             </button>
                             <div class="w-2/6 flex justify-end items-center">
-                                <form action="" method="post" id="poppy_search_form">
-                                    <input id="poppy_search_input" name="poppy_search"
-                                        class="mx-4 w-50 border rounded-md px-4 py-2" type="text"
-                                        placeholder="Search using poppy id">
-                                </form>
                             </div>
                         </div>
                     </div>
@@ -81,57 +76,90 @@
                     <div class="h-screen dark:bg-gray-700 bg-gray-200 pt-12">
 
                         <!-- Profile card -->
-                        <% if(info=='' ){ %>
+                        <% if(find_err=='alreadyFrnd' ){ %>
                             <div
                                 class="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
                                 <div class="border-b px-4 pb-6">
                                     <div class="text-center my-4">
                                         <div class="py-2">
                                             <div class="inline-flex text-gray-700 dark:text-gray-300 items-center">
-                                                Search for users using Poppy ID
+                                                The user is already in your friend list
                                             </div>
+                                        </div>
+                                        <div class="flex gap-2 px-2">
+                                            <a href="/explore"
+                                                class="flex-1 rounded-full bg-gray-800 text-white antialiased font-bold hover:bg-gray-600 px-4 py-2">
+                                                Go Back
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <% } else{ %>
+                    </div>
+                    <% } if (find_err=='alreadyRequested' ){ %>
+                        <div class="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
+                            <div class="border-b px-4 pb-6">
+                                <div class="text-center my-4">
+                                    <div class="py-2">
+                                        <div class="inline-flex text-gray-700 dark:text-gray-300 items-center">
+                                            You have already sent a request !
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2 px-2">
+                                        <a href="/explore"
+                                            class="flex-1 rounded-full bg-gray-800 text-white antialiased font-bold hover:bg-gray-600 px-4 py-2">
+                                            Go Back
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <% } %>
+                            <% if (find_err=='noerror' ){ %>
                                 <div
                                     class="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
                                     <div class="border-b px-4 pb-6">
                                         <div class="text-center my-4">
                                             <div class="py-2">
                                                 <div class="inline-flex text-gray-700 dark:text-gray-300 items-center">
-                                                    Invalid Poppy ID !
+                                                    Friend request sent
                                                 </div>
+                                            </div>
+                                            <div class="flex gap-2 px-2">
+                                                <a href="/explore"
+                                                    class="flex-1 rounded-full bg-gray-800 text-white antialiased font-bold hover:bg-gray-600 px-4 py-2">
+                                                    Add Friend
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                                    <% } %>
-                             <!-- Profile card end -->        
-                             </div>
-
-
-                    </div>
+                                </div>
+                                <% } %>
+                                    <!-- Profile card end -->
                 </div>
+
+
             </div>
-
         </div>
-        <script>
-            const sidebar = document.getElementById('sidebar');
-            const openSidebarButton = document.getElementById('open-sidebar');
+    </div>
 
-            openSidebarButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('-translate-x-full');
-            });
+    </div>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarButton = document.getElementById('open-sidebar');
 
-            document.addEventListener('click', (e) => {
-                if (!sidebar.contains(e.target) && !openSidebarButton.contains(e.target)) {
-                    sidebar.classList.add('-translate-x-full');
-                }
-            });
-        </script>
-        <%- include("../partials/gsp_client.ejs") %>
+        openSidebarButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !openSidebarButton.contains(e.target)) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+    </script>
+    <%- include("../partials/gsp_client.ejs") %>
 
 </body>
 

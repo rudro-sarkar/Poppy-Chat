@@ -4,14 +4,15 @@
 <head>
     <%- include("../partials/head.ejs") %>
 
-        <title>Requests | <%= data.username %></title>
+        <title>Requests | <%= data.username %>
+        </title>
 </head>
 
 <body>
 
     <div class="bg-gray-100">
 
-        <div class="h-screen w-screen flex overflow-hidden bg-gray-200">
+        <div class="h-screen w-screen flex overflow-hidden bg-white">
             <!-- Sidebar -->
             <div class="absolute bg-gray-800 text-white w-56 min-h-screen overflow-y-auto transition-transform transform -translate-x-full ease-in-out duration-300"
                 id="sidebar">
@@ -19,25 +20,29 @@
                 <div class="p-4">
                     <h1 class="text-2xl font-semibold"><span class="text-red-500">Poppy</span> Chat</h1>
                     <ul class="mt-8">
-                        <div class="cursor-pointer flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+                        <div
+                            class="cursor-pointer flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                             &nbsp;
                             <i class="fa-solid fa-inbox"></i>
                             <li class=""><a href="/inbox">Inbox</a></li>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
-                        <div class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+                        <div
+                            class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                             &nbsp;
                             <i class="fa-solid fa-magnifying-glass"></i>
                             <li class=""><a href="/explore">Explore</a></li>
                             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
-                        <div class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded bg-gray-700">
+                        <div
+                            class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded bg-gray-700">
                             &nbsp;
                             <i class="fa-solid fa-bell"></i>
                             <li class=""><a href="/requests">Requests</a></li>
                             &nbsp;&nbsp;&nbsp;&nbsp;
                         </div>
-                        <div class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+                        <div
+                            class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                             &nbsp;
                             <i class="fa-solid fa-gear"></i>
                             <li class=""><a href="/settings">Settings</a></li>
@@ -63,7 +68,9 @@
                             <div class="w-2/6 flex justify-end items-center">
                                 <div class="flex justify-around items-center w-32 h-8">
                                     <img class="w-7 h-7 rounded-full" src="/resources/profile_pic.jpg">
-                                    <h1 class="font-semibold"><%= data.username %></h1>
+                                    <h1 class="font-semibold">
+                                        <%= data.username %>
+                                    </h1>
                                 </div>
                             </div>
                         </div>
@@ -71,8 +78,33 @@
                 </div>
                 <!-- Content Body -->
                 <div class="flex-1 overflow-auto p-4">
-                    <h1 class="text-2xl font-semibold">Welcome to our website</h1>
-                    <p>... Content goes here ...</p>
+
+                    <section class="text-gray-600 body-font">
+                        <div class="container px-5 mx-auto">
+                            <div class="flex flex-col text-center w-full mb-20">
+                                <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Friend Requests</h1>
+                                <p class="lg:w-2/3 mx-auto leading-relaxed text-base">
+                                    Welcome <span class="text-blue-600"><%= data.username %></span>! Here, you'll find people who have added you. You can accept or decline their requests by clicking on their profile.                                 
+                                </p>
+                            </div>
+                            <div class="flex flex-wrap -m-2">
+                            <% for (element of requestListArray){ %>
+                                <div class="p-2 lg:w-1/3 md:w-1/2 w-full">
+                                    <div class="h-full flex items-center border-gray-200 border p-4 rounded-lg">
+                                        <img alt="team"
+                                            class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4"
+                                            src="https://dummyimage.com/80x80">
+                                        <div class="flex-grow">
+                                            <h2 class="text-gray-900 title-font font-medium"><%= element %></h2>
+                                            <p class="text-gray-500">UI Designer</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            </div>
+                        </div>
+                    </section>
+
                 </div>
             </div>
         </div>
@@ -92,8 +124,9 @@
                 sidebar.classList.add('-translate-x-full');
             }
         });
-    </script>
 
+    </script>
+    <%- include("../partials/gsp_client.ejs") %>
 </body>
 
 </html>

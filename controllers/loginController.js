@@ -38,7 +38,7 @@ const login = async (req, res) => {
 
 const logout = async (req, res) => {
     req.session.destroy();
-    red.redirect('/login');
+    res.redirect('/login');
 }
 
 const loadDashboard = async (req, res) => {
@@ -46,6 +46,7 @@ const loadDashboard = async (req, res) => {
         username: req.session.user.name,
         email: req.session.user.email,
         poppy_id: req.session.user.poppy_id,
+        _id: req.session.user._id,
         created_at: req.session.user.createdAt
     }
     res.render('inbox', { data });
@@ -56,9 +57,10 @@ const loadExplorePage = async (req, res) => {
         username: req.session.user.name,
         email: req.session.user.email,
         poppy_id: req.session.user.poppy_id,
+        _id: req.session.user._id,
         created_at: req.session.user.createdAt
     }
-    res.render('explore', { data });
+    res.render('explore', { data: data, info : '', find_err: '' });
 }
 
 const loadRequestsPage = async (req, res) => {
@@ -66,9 +68,12 @@ const loadRequestsPage = async (req, res) => {
         username: req.session.user.name,
         email: req.session.user.email,
         poppy_id: req.session.user.poppy_id,
+        _id: req.session.user._id,
         created_at: req.session.user.createdAt
     }
-    res.render('requests', { data });
+    const searched_data = await userModel.findOne({ _id: data._id });
+    const request_list_array = searched_data.request_list;
+    res.render('requests', { data: data, requestListArray: request_list_array });
 }
 
 const loadSettingsPage = async (req, res) => {
@@ -76,6 +81,7 @@ const loadSettingsPage = async (req, res) => {
         username: req.session.user.name,
         email: req.session.user.email,
         poppy_id: req.session.user.poppy_id,
+        _id: req.session.user._id,
         created_at: req.session.user.createdAt
     }
     res.render('settings', { data });
