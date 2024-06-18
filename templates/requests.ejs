@@ -93,12 +93,15 @@
                                     <div class="h-full flex items-center border-gray-200 border p-4 rounded-lg">
                                         <img alt="team"
                                             class="w-16 h-16 bg-gray-100 object-cover object-center flex-shrink-0 rounded-full mr-4"
-                                            src="https://dummyimage.com/80x80">
+                                            src="resources/profile_pic.jpg">
                                         <div class="flex-grow">
-                                            <h2 class="text-gray-900 title-font font-medium"><%= element %></h2>
-                                            <p class="text-gray-500">UI Designer</p>
+                                            <h2 class="text-gray-900 title-font font-medium"><%= element.username %></h2>
+                                            <p class="text-gray-500"><%= element.poppy_id %></p>
                                         </div>
-                                    </div>
+                                        <form action="/inspect/<%= element.poppy_id %>" method="post">
+                                            <button type="submit" class="flex justify-center items-center w-20 h-8 text-white bg-gray-700 hover:bg-gray-600 rounded" href="">Inspect</button>
+                                        </form>
+                                    </div>                       
                                 </div>
                             <% } %>
                             </div>

@@ -7,6 +7,7 @@ const authMiddeware = require("../middlewares/authMiddle");
 const login_controller = require("../controllers/loginController");
 const settings_controller = require("../controllers/settingsController");
 const searchController = require("../controllers/searchController");
+const friendRequestController = require("../controllers/friend_request_controller");
 
 login_router.use(loginSession({
     secret: process.env.SECONDARY_SESSION_SECRET,
@@ -32,6 +33,10 @@ login_router.post('/reqestAccountDeletion', authMiddeware.session_route_mgmt, se
 login_router.post('/proceedToDeletion', authMiddeware.session_route_mgmt, settings_controller.proceedAccDeletion);
 
 login_router.post('/addfriend', authMiddeware.session_route_mgmt, searchController.addfriend);
+
+login_router.post('/inspect/:poppy_id', authMiddeware.session_route_mgmt, friendRequestController.inspectProfile)
+login_router.post('/confirmrequest/:poppy_id', authMiddeware.session_route_mgmt, friendRequestController.confirmRequest);
+login_router.post('/declinerequest/:poppy_id', authMiddeware.session_route_mgmt, friendRequestController.declineRequest);
 
 module.exports = login_router;
 

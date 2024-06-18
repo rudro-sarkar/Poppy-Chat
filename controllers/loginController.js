@@ -73,7 +73,19 @@ const loadRequestsPage = async (req, res) => {
     }
     const searched_data = await userModel.findOne({ _id: data._id });
     const request_list_array = searched_data.request_list;
-    res.render('requests', { data: data, requestListArray: request_list_array });
+    const all_profiles = await userModel.find({_id: {$nin: data._id}});
+    let request_list_accounts = [];
+    for (elms in all_profiles) {
+        // console.log(all_profiles[elms].poppy_id);
+        if (request_list_array.includes(all_profiles[elms].poppy_id)) {
+            let requested_accounts = {
+                username: all_profiles[elms].name,
+                poppy_id: all_profiles[elms].poppy_id
+            }
+            request_list_accounts.push(requested_accounts);
+        }
+    }
+    res.render('requests', { data: data, requestListArray: request_list_accounts });
 }
 
 const loadSettingsPage = async (req, res) => {

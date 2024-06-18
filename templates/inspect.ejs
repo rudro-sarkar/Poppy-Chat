@@ -4,7 +4,7 @@
 <head>
     <%- include("../partials/head.ejs") %>
 
-        <title>Explore | <%= data.username %>
+        <title>User Profile | <%= data_for_client.username %>
         </title>
 </head>
 
@@ -66,6 +66,11 @@
                                 </svg>
                             </button>
                             <div class="w-2/6 flex justify-end items-center">
+                                <form action="" method="post" id="poppy_search_form">
+                                    <input id="poppy_search_input" name="poppy_search"
+                                        class="mx-4 w-50 border rounded-md px-4 py-2" type="text"
+                                        placeholder="Search using poppy id">
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -73,77 +78,60 @@
                 <!-- Content Body -->
                 <div class="flex-1 overflow-auto p-4">
 
-                    <div class="h-screen bg-gray-200 pt-12">
+                    <div class="h-screen dark:bg-gray-700 bg-gray-200 pt-12">
 
                         <!-- Profile card -->
-                        <% if(find_err=='alreadyFrnd' ){ %>
                             <div
-                                class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+                                class="max-w-sm mx-auto bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-lg">
                                 <div class="border-b px-4 pb-6">
                                     <div class="text-center my-4">
+                                        <img class="h-32 w-32 rounded-full border-4 border-white dark:border-gray-800 mx-auto my-4"
+                                            src="/resources/profile_pic.jpg" alt="">
                                         <div class="py-2">
+                                            <h3 class="font-bold text-2xl text-gray-800 dark:text-white mb-1">
+                                                <%= data_for_client.username %>
+                                            </h3>
                                             <div class="inline-flex text-gray-700 dark:text-gray-300 items-center">
-                                                The user is already in your friend list
+                                                <i class="fa-solid fa-user"></i>&nbsp;
+                                                <%= data_for_client.poppy_id %>
                                             </div>
                                         </div>
-                                        <div class="flex gap-2 px-2">
-                                            <a href="/explore"
-                                                class="flex-1 rounded-full bg-gray-800 text-white antialiased font-bold hover:bg-gray-600 px-4 py-2">
-                                                Go Back
-                                            </a>
-                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                    </div>
-                    <% } if (find_err=='alreadyRequested' ){ %>
-                        <div class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
-                            <div class="border-b px-4 pb-6">
-                                <div class="text-center my-4">
-                                    <div class="py-2">
-                                        <div class="inline-flex text-gray-700 dark:text-gray-300 items-center">
-                                            You have already sent a request !
-                                        </div>
-                                    </div>
+                                    <form id="confirmFriendForm" action="/confirmrequest/<%= data_for_client.poppy_id %>" method="post"></form>
+                                    <form id="declineFriendForm" action="/declinerequest/<%= data_for_client.poppy_id %>" method="post"></form>
                                     <div class="flex gap-2 px-2">
-                                        <a href="/explore"
-                                            class="flex-1 rounded-full bg-gray-800 text-white antialiased font-bold hover:bg-gray-600 px-4 py-2">
-                                            Go Back
-                                        </a>
+                                        <button id="confirmFriendFormBtn"
+                                            class="flex-1 rounded-full bg-gray-700 text-white antialiased font-bold hover:bg-gray-600 px-4 py-2">
+                                            Accept
+                                        </button>
+                                        <button id="declineFriendFormBtn"
+                                            class="flex-1 rounded-full bg-red-500 text-white antialiased font-bold hover:bg-red-400 px-4 py-2">
+                                            Decline
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <% } %>
-                            <% if (find_err=='noerror' ){ %>
-                                <div
-                                    class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
-                                    <div class="border-b px-4 pb-6">
-                                        <div class="text-center my-4">
-                                            <div class="py-2">
-                                                <div class="inline-flex text-gray-700 dark:text-gray-300 items-center">
-                                                    Friend request sent
-                                                </div>
-                                            </div>
-                                            <div class="flex gap-2 px-2">
-                                                <a href="/explore"
-                                                    class="flex-1 rounded-full bg-gray-800 text-white antialiased font-bold hover:bg-gray-600 px-4 py-2">
-                                                    Go Back
-                                                </a>
-                                            </div>
-                                        </div>
+                                <div class="px-4 py-4">
+                                    <div class="flex gap-2 items-center text-gray-800 dark:text-gray-300 mb-4">
+                                        <svg class="h-6 w-6 text-gray-600 dark:text-gray-400" fill="currentColor"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24"
+                                            height="24">
+                                            <path class=""
+                                                d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm9 11a1 1 0 0 1-2 0v-2a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v2a1 1 0 0 1-2 0v-2a5 5 0 0 1 5-5h8a5 5 0 0 1 5 5v2z" />
+                                        </svg>
+                                        <span><strong class="text-black dark:text-white">
+                                            </strong>
+                                           <%= data_for_client.friends_count %> Poppy Friends</span>
                                     </div>
                                 </div>
-                                <% } %>
-                                    <!-- Profile card end -->
+                            </div
+
+                    </div>
                 </div>
-
-
             </div>
         </div>
-    </div>
 
     </div>
+
     <script>
         const sidebar = document.getElementById('sidebar');
         const openSidebarButton = document.getElementById('open-sidebar');
@@ -158,6 +146,23 @@
                 sidebar.classList.add('-translate-x-full');
             }
         });
+
+        const confirmFriendForm = document.getElementById("confirmFriendForm");
+        const declineFriendForm = document.getElementById("declineFriendForm");
+
+        const confirmFriendFormBtn = document.getElementById("confirmFriendFormBtn");
+        const declineFriendFormBtn = document.getElementById("declineFriendFormBtn");
+
+        confirmFriendFormBtn.addEventListener('click', e => {
+            e.preventDefault();
+            confirmFriendForm.submit();
+        });
+
+        declineFriendFormBtn.addEventListener('click', e => {
+            e.preventDefault();
+            declineFriendForm.submit();
+        });
+
     </script>
     <%- include("../partials/gsp_client.ejs") %>
 
