@@ -11,8 +11,7 @@
 <body>
 
     <div class="bg-gray-100">
-
-        <div class="h-screen w-screen flex overflow-hidden bg-gray-200">
+        <div class="h-screen w-screen flex overflow-hidden">
             <!-- Sidebar -->
             <div class="absolute bg-gray-800 text-white w-56 min-h-screen overflow-y-auto transition-transform transform -translate-x-full ease-in-out duration-300"
                 id="sidebar">
@@ -75,13 +74,35 @@
                         </div>
                     </div>
                 </div>
+
                 <!-- Content Body -->
                 <div class="flex-1 overflow-auto p-4">
-                    <h1 class="text-2xl font-semibold">Welcome to our website</h1>
-                    <p>... Content goes here ...</p>
+                    <div class="space-y-4">
+
+                        <% for (element of friendListArray) { %>
+                            <div class="flex items-center p-3 bg-white rounded-lg shadow-md">
+                                <img src="/resources/profile_pic.jpg" alt="Profile" class="h-12 w-12 rounded-full mr-3">
+                                <div>
+                                    <div class="flex items-center">
+                                        <p class="text-lg font-semibold text-gray-800">
+                                            <%= element.username %>
+                                        </p>
+                                        <% if (element.status=='online' ) { %>
+                                            <span class="h-2 w-2 bg-green-500 rounded-full ml-1"></span>
+                                            <% } %>
+                                    </div>
+                                    <p class="text-sm text-gray-600">
+                                        <%= element.poppy_id %>
+                                    </p>
+                                </div>
+                            </div>
+                            <% } %>
+
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
     </div>
     <script>
