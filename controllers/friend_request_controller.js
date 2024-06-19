@@ -13,7 +13,7 @@ const inspectProfile = async (req, res) => {
         }
         res.render('inspect', { data_for_client });
     }else {
-        res.render('/inbox');
+        res.redirect('/inbox');
     }
 }
 
