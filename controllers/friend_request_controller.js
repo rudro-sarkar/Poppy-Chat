@@ -9,7 +9,11 @@ const inspectProfile = async (req, res) => {
         poppy_id: user_data.poppy_id,
         friends_count: (user_data.friends_list).length
     }
+<<<<<<< HEAD
     res.render('inspect', { data_for_client });   
+=======
+    res.render('inspect', { data_for_client });
+>>>>>>> 9da2413e6acb122b7887608827db6af94aaaeb0a
 }
 
 const confirmRequest = async (req, res) => {
