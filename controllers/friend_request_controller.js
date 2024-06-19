@@ -12,6 +12,8 @@ const inspectProfile = async (req, res) => {
             friends_count: (user_data.friends_list).length
         }
         res.render('inspect', { data_for_client });
+    }else {
+        res.render('/inbox');
     }
 }
 

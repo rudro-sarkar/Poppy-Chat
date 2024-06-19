@@ -61,9 +61,9 @@ const loadDashboard = async (req, res) => {
                 status: all_profiles[elms].status
             }
             friend_list_accounts.push(friend_accounts);
-            res.render('inbox', { data: data, friendListArray: friend_list_accounts });
         }
     }
+    res.render('inbox', { data: data, friendListArray: friend_list_accounts });
 }
 
 const loadExplorePage = async (req, res) => {

@@ -80,7 +80,7 @@
                     <div class="space-y-4">
 
                         <% for (element of friendListArray) { %>
-                            <div class="flex items-center p-3 bg-white rounded-lg shadow-md">
+                            <div id="profile_selector" profile_id="<%= element.poppy_id %>" class="flex items-center p-3 bg-white rounded-lg shadow-md cursor-pointer hover:bg-red-100">
                                 <img src="/resources/profile_pic.jpg" alt="Profile" class="h-12 w-12 rounded-full mr-3">
                                 <div>
                                     <div class="flex items-center">
@@ -92,6 +92,7 @@
                                             <% } %>
                                     </div>
                                     <p class="text-sm text-gray-600">
+                                        <i class="fa-solid fa-user"></i>&nbsp;
                                         <%= element.poppy_id %>
                                     </p>
                                 </div>
@@ -119,6 +120,10 @@
                 sidebar.classList.add('-translate-x-full');
             }
         });
+
+        // let profile_selector = document.getElementById("profile_selector");
+        // console.log(profile_selector.getAttribute('profile_id'));
+
     </script>
 
     <%- include("../partials/gsp_client.ejs") %>
