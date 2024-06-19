@@ -45,6 +45,7 @@ const io = require("socket.io")(server);
 
 // Creating general namespace & managing events
 const gsp = io.of('/general'); // general namespace
+const msp = io.of('/messaging'); // messaging namespace
 
 // Updating user status on connection & disconnect
 gsp.on('connection', async socket => {
@@ -57,11 +58,28 @@ gsp.on('connection', async socket => {
     });
 });
 
+msp.on('connection', async socket => {
+    let sender_id;
+    socket.on('initiate_conversation', receiver_id => {
+        sender_id = socket.handshake.auth.senderId;
+        let receiver = receiver_id;
+    });
+
+    socket.on('new_msg', data => {
+        let msg_info = {
+            sender: sender_id,
+            receiver: data.receiver,
+            body: data.body
+        }
+        socket.broadcast.emit('msg_arrive', msg_info);
+    });
+
+});
+
 // Starting the server
 server.listen(config.port, () => {
     console.log(`Server is now listening on port ${config.port}`);
 });
-
 
 
 //dove code
@@ -88,3 +106,7 @@ server.listen(config.port, () => {
 //         content: 'hello vai i miss u'
 //     }
 // ]);
+
+//dove : latest doc of database
+// let document = await userModel.findOne({ poppy_id: req.session.user.poppy_id }, { sort: {created_at: -1} });
+// console.log(document);

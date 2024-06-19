@@ -4,13 +4,13 @@
 <head>
     <%- include("../partials/head.ejs") %>
 
-        <title>Inbox | <%= data.username %>
+        <title>Conversation with <%= receiver %>
         </title>
 </head>
 
 <body>
 
-    <div class="bg-gray-100">
+    <div class="bg-white">
         <div class="h-screen w-screen flex overflow-hidden">
             <!-- Sidebar -->
             <div class="absolute bg-gray-800 text-white w-56 min-h-screen overflow-y-auto transition-transform transform -translate-x-full ease-in-out duration-300"
@@ -77,30 +77,38 @@
 
                 <!-- Content Body -->
                 <div class="flex-1 overflow-auto p-4">
-                    <div class="space-y-4">
 
-                        <% for (element of friendListArray) { %>
-                            <div profile_id="<%= element.poppy_id %>"
-                                class="flex items-center p-3 bg-white rounded-lg shadow-md cursor-pointer profile_selector">
-                                <img src="/resources/profile_pic.jpg" alt="Profile" class="h-12 w-12 rounded-full mr-3">
-                                <div>
-                                    <div class="flex items-center" id="user_display">
-                                        <p class="text-lg font-semibold text-gray-800">
-                                            <%= element.username %>
-                                        </p>
-                                        <% if (element.status=='online' ) { %>
-                                            <span class="h-2 w-2 bg-green-500 rounded-full ml-1"></span>
-                                            <% } %>
-                                    </div>
-                                    <p class="text-sm text-gray-600">
-                                        <i class="fa-solid fa-user"></i>&nbsp;
-                                        <%= element.poppy_id %>
-                                    </p>
-                                </div>
+
+                    <!-- Inbox Content -->
+                    <div class="flex flex-col h-full overflow-y-auto">
+                        <!-- Conversation Title/Header -->
+                        <div class="bg-gray-100 px-4 py-3 border-b">
+                            <div class="flex items-center">
+                                <img src="/resources/profile_pic.jpg" alt="Receiver Avatar"
+                                    class="w-8 h-8 rounded-full mr-2">
+                                <span class="font-semibold text-gray-800">
+                                    <%= receiver %>
+                                </span>
                             </div>
-                            <% } %>
+                        </div>
 
+                        <!-- Chat Messages -->
+                        <div class="px-4 py-4 flex-1 overflow-y-auto main_msgs_container" id="msg_container">
+                     
+                            <!-- msgs -->
+
+                        </div>
+
+                        <!-- Message Input Area -->
+                        <div class="bg-gray-100 px-4 py-3 flex items-center">
+                            <input id="msgInput" type="text" placeholder="Type a message..."
+                                class="w-full bg-white border rounded-full px-4 py-2 focus:outline-none">
+                            <button id="msgSend"
+                                class="ml-4 bg-gray-800 hover:bg-gray-600 text-white px-4 py-2 rounded-full">Send</button>
+                        </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -113,7 +121,6 @@
         <script>
             const sidebar = document.getElementById('sidebar');
             const openSidebarButton = document.getElementById('open-sidebar');
-            const userDisplay = document.getElementById("user_display");
 
             openSidebarButton.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -126,27 +133,67 @@
                 }
             });
 
-            const profile_selector = document.querySelectorAll('.profile_selector');
-            profile_selector.forEach(div => {
-                div.addEventListener('click', (e) => {
-                    let selected_profile = div.getAttribute('profile_id');
-                    window.location.href = `/conversation/${selected_profile}`;
-                });
-            });
-
             const msp_socket = io('/messaging', {
                 auth: {
                     senderId: "<%= data.poppy_id %>"
                 }
             });
+            msp_socket.emit('initiate_conversation', "<%= receiver %>");
+
+            const msgInput = document.getElementById("msgInput");
+            const msgSend = document.getElementById("msgSend");
+
+            const sendMsgToOtherEnd = () => {
+                let msg = msgInput.value;
+                if (msg) {
+                    msp_socket.emit('new_msg', {
+                        body: msg,
+                        receiver: "<%= receiver %>"
+                    });
+                    let msgBox = document.createElement('div');
+                    msgBox.classList.add('flex', 'justify-end', 'mb-4');
+
+                    let text = document.createElement('div');
+                    text.classList.add('bg-gray-800', 'text-white', 'px-4', 'py-2', 'rounded-lg', 'max-w-xs', 'break-words');
+                    text.innerText = msg;
+
+                    msgBox.appendChild(text);
+                    msg_container.appendChild(msgBox);
+
+                    let main_msgs_container = document.querySelector(".main_msgs_container");
+                    main_msgs_container.scrollTop = main_msgs_container.scrollHeight;
+
+                    msgInput.value = "";
+
+                }
+            }
+
+            msgSend.addEventListener('click', sendMsgToOtherEnd);
+            msgInput.addEventListener('keyup', e => {
+                if (e.keyCode === 13 && e.shiftKey === false) {
+                    sendMsgToOtherEnd();
+                }
+            });
+
+            const msg_container = document.getElementById("msg_container");
 
             msp_socket.on('msg_arrive', data => {
-                profile_selector.forEach(div => {
-                    if (div.getAttribute('profile_id') == data.sender) {
-                        div.classList.add('highlighted-div');
-                    }
-                });
+
+                let msgBox = document.createElement('div');
+                msgBox.classList.add('flex', 'justify-start', 'mb-4');
+
+                let msg = document.createElement('div');
+                msg.classList.add('bg-gray-200', 'text-black', 'px-4', 'py-2', 'rounded-lg', 'max-w-xs', 'break-words');
+                msg.innerText = data.body;
+
+                msgBox.appendChild(msg);
+                msg_container.appendChild(msgBox);
+
+                let main_msgs_container = document.querySelector(".main_msgs_container");
+                main_msgs_container.scrollTop = main_msgs_container.scrollHeight;
+
             });
+
 
         </script>
 
