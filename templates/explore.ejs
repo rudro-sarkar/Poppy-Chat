@@ -71,6 +71,8 @@
                                         class="mx-4 w-50 border rounded-md px-4 py-2" type="text"
                                         placeholder="Search using poppy id">
                                 </form>
+                                <span><i id="search_submit_icon"
+                                        class="fa-solid fa-magnifying-glass cursor-pointer"></i></span>
                             </div>
                         </div>
                     </div>
@@ -82,8 +84,8 @@
 
                         <!-- Profile card -->
                         <% if(info=='' ){ %>
-                            <div
-                                class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+                            <div id="search_poppy_id_div"
+                                class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg cursor-pointer hover:bg-gray-100">
                                 <div class="border-b px-4 pb-6">
                                     <div class="text-center my-4">
                                         <div class="py-2">
@@ -95,8 +97,7 @@
                                 </div>
                             </div>
                             <% } else{ %>
-                                <div
-                                    class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+                                <div id="search_poppy_id_div" class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
                                     <div class="border-b px-4 pb-6">
                                         <div class="text-center my-4">
                                             <div class="py-2">
@@ -107,8 +108,8 @@
                                         </div>
                                     </div>
                                     <% } %>
-                             <!-- Profile card end -->        
-                             </div>
+                                        <!-- Profile card end -->
+                                </div>
 
 
                     </div>
@@ -130,6 +131,26 @@
                     sidebar.classList.add('-translate-x-full');
                 }
             });
+
+            const poppy_search_input = document.getElementById("poppy_search_input");
+            const search_poppy_id_div = document.getElementById("search_poppy_id_div");
+
+            if (search_poppy_id_div) {
+                search_poppy_id_div.addEventListener('click', () => {
+                    poppy_search_input.focus();
+                });
+            }
+
+            const poppy_search_form = document.getElementById("poppy_search_form");
+            const search_submit_icon = document.getElementById("search_submit_icon");
+
+            if (search_submit_icon) {
+                search_submit_icon.addEventListener('click', () => {
+                    poppy_search_form.submit();
+                });
+            }
+
+
         </script>
         <%- include("../partials/gsp_client.ejs") %>
 

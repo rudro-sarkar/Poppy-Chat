@@ -71,6 +71,8 @@
                                         class="mx-4 w-50 border rounded-md px-4 py-2" type="text"
                                         placeholder="Search using poppy id">
                                 </form>
+                                <span><i id="search_submit_icon"
+                                        class="fa-solid fa-magnifying-glass cursor-pointer"></i></span>
                             </div>
                         </div>
                     </div>
@@ -82,8 +84,7 @@
 
                         <!-- Profile card -->
                         <% if(info !=='' ){ %>
-                            <div
-                                class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+                            <div class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
                                 <div class="border-b px-4 pb-6">
                                     <div class="text-center my-4">
                                         <img class="h-32 w-32 rounded-full border-4 border-white mx-auto my-4"
@@ -122,8 +123,7 @@
                                 </div>
                             </div>
                             <% } else{ %>
-                                <div
-                                    class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
+                                <div id="search_poppy_id_div" class="max-w-sm mx-auto bg-white rounded-lg overflow-hidden shadow-lg">
                                     <div class="border-b px-4 pb-6">
                                         <div class="text-center my-4">
                                             <div class="py-2">
@@ -164,9 +164,18 @@
         const addfriendform = document.getElementById("addfriendform");
         const addfriendformSubmitBtn = document.getElementById("addfriendformSubmitBtn");
 
-        addfriendformSubmitBtn.addEventListener('click', e => {
-            e.preventDefault();
-            addfriendform.submit();
+        if (addfriendformSubmitBtn) {
+            addfriendformSubmitBtn.addEventListener('click', e => {
+                e.preventDefault();
+                addfriendform.submit();
+            });
+        }
+
+        const poppy_search_form = document.getElementById("poppy_search_form");
+        const search_submit_icon = document.getElementById("search_submit_icon");
+
+        search_submit_icon.addEventListener('click', () => {
+            poppy_search_form.submit();
         });
 
     </script>

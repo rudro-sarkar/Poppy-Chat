@@ -132,7 +132,10 @@
             const msgSend = document.getElementById("msgSend");
 
             const sendMsgToOtherEnd = (msg) => {
-                if (msg) {
+                msgInput.style.display = 'none';
+                msgSend.style.display = 'none';
+                setTimeout(() => {
+                    if (msg) {
                     msp_socket.emit('new_msg', {
                         body: msg,
                         receiver: "<%= receiver %>"
@@ -151,8 +154,11 @@
                     main_msgs_container.scrollTop = main_msgs_container.scrollHeight;
 
                     msgInput.value = "";
+                    msgInput.style.display = 'block';
+                    msgSend.style.display = 'block';
 
                 }
+                }, 2000)
             }
 
             const clientReceiveMsg = (content) => {
