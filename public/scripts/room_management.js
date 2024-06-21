@@ -56,14 +56,11 @@ const get_client_video_stream = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
-                console.log('Stream obtained:', stream);
-
                 media_stream = stream;
                 client_video_display.srcObject = media_stream;
 
                 client_video_display.addEventListener('loadedmetadata', () => {
                     client_video_display.play().then(() => {
-                        alert('Video playback started');
                     }).catch(() => {
                         const noVidStartToast = Swal.mixin({
                             toast: true,
