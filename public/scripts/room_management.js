@@ -4,15 +4,9 @@ const client_video_display = document.getElementById('client_video_display');
 const mic_toggle_btn = document.getElementById("mic_toggle_btn");
 const camera_toggle_btn = document.getElementById("camera_toggle_btn");
 const camera_select_dropdown = document.getElementById("camera_select_dropdown");
+const share_screen_btn = document.getElementById("share_screen_btn");
 
 let media_stream;
-
-let constraints = {
-    audio: true,
-    video: {
-        facingMode: 'user'
-    }
-};
 
 let client_media_status = {
     is_muted: false,
@@ -27,7 +21,7 @@ mic_toggle_btn.addEventListener('click', () => {
         media_stream.getAudioTracks().forEach(track => {
             track.enabled = true;
         });
-    }else {
+    } else {
         mic_toggle_btn.innerHTML = `<i class="fa-solid fa-microphone-slash"></i>`;
         client_media_status.is_muted = true;
         media_stream.getAudioTracks().forEach(track => {
@@ -43,7 +37,7 @@ camera_toggle_btn.addEventListener('click', () => {
         media_stream.getVideoTracks().forEach(track => {
             track.enabled = true;
         });
-    }else {
+    } else {
         camera_toggle_btn.innerHTML = `<i class="fa-solid fa-video-slash"></i>`;
         client_media_status.is_camera_off = true;
         media_stream.getVideoTracks().forEach(track => {
@@ -52,7 +46,7 @@ camera_toggle_btn.addEventListener('click', () => {
     }
 });
 
-const get_client_video_stream = () => {
+const get_client_video_stream = (constraints) => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
@@ -104,11 +98,48 @@ const get_client_video_stream = () => {
     }
 }
 
+const get_client_screen_stream = () => {
+    window.navigator.mediaDevices.getDisplayMedia({ audio: true, video: true }).then(stream => {
+        media_stream = stream;
+        client_video_display.srcObject = media_stream;
+
+        client_video_display.addEventListener('loadedmetadata', () => {
+            client_video_display.play().then(() => {
+            }).catch(() => {
+                const noScrStartToast = Swal.mixin({
+                    toast: true,
+                    position: "top-start",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true
+                });
+                noScrStartToast.fire({
+                    icon: "error",
+                    title: "Cannot start screen share!"
+                });
+            });
+        });
+    });
+}
+
 camera_select_dropdown.addEventListener('input', e => {
     let selected_mode = e.target.value;
-    constraints.video.facingMode = selected_mode;
-    get_client_video_stream();
+    let selected_constraints = {
+        audio: true,
+        video: {
+            facingMode: selected_mode
+        }
+    }
+    get_client_video_stream(selected_constraints);
 });
 
-get_client_video_stream();
-get_client_cameras();
+share_screen_btn.addEventListener('click', get_client_screen_stream);
+
+let default_constraints = {
+    audio: true,
+    video: {
+        facingMode: 'user'
+    }
+};
+
+get_client_video_stream(default_constraints);
