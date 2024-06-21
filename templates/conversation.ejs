@@ -132,8 +132,8 @@
             const msgSend = document.getElementById("msgSend");
 
             const sendMsgToOtherEnd = (msg) => {
-                msgInput.style.display = 'none';
-                msgSend.style.display = 'none';
+                msgInput.setAttribute('readonly', true);
+                msgInput.placeholder = 'Wait a second before sending again';
                 setTimeout(() => {
                     if (msg) {
                     msp_socket.emit('new_msg', {
@@ -153,12 +153,12 @@
                     let main_msgs_container = document.querySelector(".main_msgs_container");
                     main_msgs_container.scrollTop = main_msgs_container.scrollHeight;
 
-                    msgInput.value = "";
-                    msgInput.style.display = 'block';
-                    msgSend.style.display = 'block';
+                    msgInput.removeAttribute('readonly', true);
+                    msgInput.placeholder = 'Type a message...';
+                    msgInput.focus();
 
                 }
-                }, 2000)
+                }, 1250);
             }
 
             const clientReceiveMsg = (content) => {
@@ -220,12 +220,13 @@
             msgSend.addEventListener('click', () => {
                 let msg = msgInput.value;
                 sendMsgToOtherEnd(msg);
-
+                msgInput.value = "";
             });
             msgInput.addEventListener('keyup', e => {
                 if (e.keyCode === 13 && e.shiftKey === false) {
                     let msg = msgInput.value;
                     sendMsgToOtherEnd(msg);
+                    msgInput.value = "";
                 }
             });
 
