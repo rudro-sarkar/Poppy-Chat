@@ -99,7 +99,20 @@ const get_client_video_stream = (constraints) => {
 }
 
 const get_client_screen_stream = () => {
-    window.navigator.mediaDevices.getDisplayMedia({ audio: true, video: true }).then(stream => {
+    const screen_constraints = {
+        video: {
+            displaySurface: "browser",
+        },
+        audio: {
+            suppressLocalAudioPlayback: false,
+        },
+        preferCurrentTab: false,
+        selfBrowserSurface: "exclude",
+        systemAudio: "include",
+        surfaceSwitching: "include",
+        monitorTypeSurfaces: "include",
+    }
+    window.navigator.mediaDevices.getDisplayMedia(screen_constraints).then(stream => {
         media_stream = stream;
         client_video_display.srcObject = media_stream;
 
