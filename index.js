@@ -14,10 +14,12 @@ const config = {
     static_path: path.resolve(__dirname, 'public'),
 }
 
+// Importing models
+const userModel = require("./models/user");
+const msgModel = require("./models/msg");
+
 // Establishing database connection & importing necessary models
 require('./database');
-
-const userModel = require("./models/user");
 
 // Creating an express app instance
 const app = express();
@@ -65,13 +67,32 @@ msp.on('connection', async socket => {
         let receiver = receiver_id;
     });
 
-    socket.on('new_msg', data => {
+    socket.on('new_msg', async data => {
         let msg_info = {
             sender: sender_id,
             receiver: data.receiver,
             body: data.body
         }
-        socket.broadcast.emit('msg_arrive', msg_info);
+        msgModel.insertMany([{
+            sender_id: msg_info.sender,
+            receiver_id: msg_info.receiver,
+            content: msg_info.body
+        }]).then(() => {
+            socket.broadcast.emit('msg_arrive', msg_info);
+        }).catch(err => console.error(err));
+    });
+
+    socket.on('load_messages', async data => {
+        const sender_contents = await msgModel.find({$or: [
+            { sender_id: data.sender, receiver_id: data.receiver },
+            { sender_id: data.receiver, receiver_id: data.sender }
+        ]});
+        let msg_array = [];
+        sender_contents.forEach(element => {
+            let chat = { sender: element.sender_id, content: element.content }
+            msg_array.push(chat);
+        });
+        socket.emit('msg_loaded', msg_array);
     });
 
 });

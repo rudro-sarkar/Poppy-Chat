@@ -94,7 +94,7 @@
 
                         <!-- Chat Messages -->
                         <div class="px-4 py-4 flex-1 overflow-y-auto main_msgs_container" id="msg_container">
-                     
+
                             <!-- msgs -->
 
                         </div>
@@ -119,32 +119,19 @@
     <%- include("../partials/gsp_client.ejs") %>
 
         <script>
-            const sidebar = document.getElementById('sidebar');
-            const openSidebarButton = document.getElementById('open-sidebar');
-
-            openSidebarButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                sidebar.classList.toggle('-translate-x-full');
-            });
-
-            document.addEventListener('click', (e) => {
-                if (!sidebar.contains(e.target) && !openSidebarButton.contains(e.target)) {
-                    sidebar.classList.add('-translate-x-full');
-                }
-            });
-
             const msp_socket = io('/messaging', {
                 auth: {
                     senderId: "<%= data.poppy_id %>"
                 }
             });
-            msp_socket.emit('initiate_conversation', "<%= receiver %>");
+
+            const sidebar = document.getElementById('sidebar');
+            const openSidebarButton = document.getElementById('open-sidebar');
 
             const msgInput = document.getElementById("msgInput");
             const msgSend = document.getElementById("msgSend");
 
-            const sendMsgToOtherEnd = () => {
-                let msg = msgInput.value;
+            const sendMsgToOtherEnd = (msg) => {
                 if (msg) {
                     msp_socket.emit('new_msg', {
                         body: msg,
@@ -168,30 +155,79 @@
                 }
             }
 
-            msgSend.addEventListener('click', sendMsgToOtherEnd);
-            msgInput.addEventListener('keyup', e => {
-                if (e.keyCode === 13 && e.shiftKey === false) {
-                    sendMsgToOtherEnd();
-                }
-            });
-
-            const msg_container = document.getElementById("msg_container");
-
-            msp_socket.on('msg_arrive', data => {
-
+            const clientReceiveMsg = (content) => {
                 let msgBox = document.createElement('div');
                 msgBox.classList.add('flex', 'justify-start', 'mb-4');
 
                 let msg = document.createElement('div');
                 msg.classList.add('bg-gray-200', 'text-black', 'px-4', 'py-2', 'rounded-lg', 'max-w-xs', 'break-words');
-                msg.innerText = data.body;
+                msg.innerText = content;
 
                 msgBox.appendChild(msg);
                 msg_container.appendChild(msgBox);
 
                 let main_msgs_container = document.querySelector(".main_msgs_container");
                 main_msgs_container.scrollTop = main_msgs_container.scrollHeight;
+            }
 
+            window.addEventListener('load', () => {
+                msp_socket.emit('load_messages', {
+                    receiver: "<%= receiver %>",
+                    sender: "<%= data.poppy_id %>"
+                });
+            });
+
+            msp_socket.on('msg_loaded', data_array => {
+                data_array.forEach(chat => {
+                    if (chat.sender == "<%= data.poppy_id %>") {
+                        let msgBox = document.createElement('div');
+                        msgBox.classList.add('flex', 'justify-end', 'mb-4');
+
+                        let text = document.createElement('div');
+                        text.classList.add('bg-gray-800', 'text-white', 'px-4', 'py-2', 'rounded-lg', 'max-w-xs', 'break-words');
+                        text.innerText = chat.content;
+
+                        msgBox.appendChild(text);
+                        msg_container.appendChild(msgBox);
+
+                        let main_msgs_container = document.querySelector(".main_msgs_container");
+                        main_msgs_container.scrollTop = main_msgs_container.scrollHeight;
+                    } else {
+                        clientReceiveMsg(chat.content);
+                    }
+                });
+            });
+
+            openSidebarButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sidebar.classList.toggle('-translate-x-full');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!sidebar.contains(e.target) && !openSidebarButton.contains(e.target)) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
+
+            msp_socket.emit('initiate_conversation', "<%= receiver %>");
+
+            msgSend.addEventListener('click', () => {
+                let msg = msgInput.value;
+                sendMsgToOtherEnd(msg);
+
+            });
+            msgInput.addEventListener('keyup', e => {
+                if (e.keyCode === 13 && e.shiftKey === false) {
+                    let msg = msgInput.value;
+                    sendMsgToOtherEnd(msg);
+                }
+            });
+
+            const msg_container = document.getElementById("msg_container");
+
+            msp_socket.on('msg_arrive', data => {
+                let content = data.body;
+                clientReceiveMsg(content);
             });
 
 
