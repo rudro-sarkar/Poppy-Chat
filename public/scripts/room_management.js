@@ -8,17 +8,30 @@ const mic_select_dropdown = document.getElementById("mic_select_dropdown");
 
 let media_stream;
 
-const constraints = {
+let constraints;
+
+let client_camera_id;
+
+
+let default_constraints = {
     audio: true,
     video: {
         facingMode: 'user'
     }
 }
 
+let main_constraints = {
+    audio: true,
+    video: {
+        deviceId: client_camera_id
+    }
+};
+
 let client_media_status = {
     is_muted: false,
     is_camera_off: false
 }
+
 
 mic_toggle_btn.addEventListener('click', () => {
     if (client_media_status.is_muted) {
@@ -52,13 +65,33 @@ camera_toggle_btn.addEventListener('click', () => {
     }
 });
 
+const get_client_cameras = () => {
+    const active_camera = media_stream.getVideoTracks()[0];
+    camera_select_dropdown.innerHTML = "";
+    window.navigator.mediaDevices.enumerateDevices().then(devices => {
+        devices.forEach(device => {
+            if (device.kind == "videoinput") {
+                const camera_option = document.createElement('option');
+                if(device.label == active_camera) {
+                    camera_option.selected = true;
+                }else {
+                    camera_option.selected = false;
+                }
+                camera_option.textContent = device.label;
+                camera_option.value = device.deviceId;
+                camera_select_dropdown.appendChild(camera_option);
+            }
+        });
+    });
+}
+
 const get_client_video_stream = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        const constraints = {
-            video: {
-                facingMode: 'user' // Use 'environment' for rear camera
-            }
-        };
+        if (client_camera_id) {
+            constraints = main_constraints;
+        }else {
+            constraints = default_constraints;
+        }
 
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
@@ -68,7 +101,6 @@ const get_client_video_stream = () => {
                 client_video_display.srcObject = media_stream;
 
                 client_video_display.addEventListener('loadedmetadata', () => {
-                    console.log('Video metadata loaded');
                     client_video_display.play().then(() => {
                         alert('Video playback started');
                     }).catch(() => {
@@ -113,4 +145,11 @@ const get_client_video_stream = () => {
         });
     }
 }
+
+camera_select_dropdown.addEventListener('input', e => {
+    let selected_id = e.target.value;
+    client_camera_id = selected_id;
+});
+
 get_client_video_stream();
+get_client_cameras();
