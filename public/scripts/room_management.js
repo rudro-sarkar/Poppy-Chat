@@ -4,26 +4,13 @@ const client_video_display = document.getElementById('client_video_display');
 const mic_toggle_btn = document.getElementById("mic_toggle_btn");
 const camera_toggle_btn = document.getElementById("camera_toggle_btn");
 const camera_select_dropdown = document.getElementById("camera_select_dropdown");
-const mic_select_dropdown = document.getElementById("mic_select_dropdown");
 
 let media_stream;
 
-let constraints;
-
-let client_camera_id;
-
-
-let default_constraints = {
+let constraints = {
     audio: true,
     video: {
         facingMode: 'user'
-    }
-}
-
-let main_constraints = {
-    audio: true,
-    video: {
-        deviceId: client_camera_id
     }
 };
 
@@ -65,34 +52,8 @@ camera_toggle_btn.addEventListener('click', () => {
     }
 });
 
-const get_client_cameras = () => {
-    const active_camera = media_stream.getVideoTracks()[0];
-    camera_select_dropdown.innerHTML = "";
-    window.navigator.mediaDevices.enumerateDevices().then(devices => {
-        devices.forEach(device => {
-            if (device.kind == "videoinput") {
-                const camera_option = document.createElement('option');
-                if(device.label == active_camera) {
-                    camera_option.selected = true;
-                }else {
-                    camera_option.selected = false;
-                }
-                camera_option.textContent = device.label;
-                camera_option.value = device.deviceId;
-                camera_select_dropdown.appendChild(camera_option);
-            }
-        });
-    });
-}
-
 const get_client_video_stream = () => {
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-        if (client_camera_id) {
-            constraints = main_constraints;
-        }else {
-            constraints = default_constraints;
-        }
-
         navigator.mediaDevices.getUserMedia(constraints)
             .then((stream) => {
                 console.log('Stream obtained:', stream);
@@ -147,8 +108,9 @@ const get_client_video_stream = () => {
 }
 
 camera_select_dropdown.addEventListener('input', e => {
-    let selected_id = e.target.value;
-    client_camera_id = selected_id;
+    let selected_mode = e.target.value;
+    constraints.video.facingMode = selected_mode;
+    get_client_video_stream();
 });
 
 get_client_video_stream();
