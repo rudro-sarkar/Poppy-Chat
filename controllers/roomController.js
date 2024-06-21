@@ -1,4 +1,5 @@
 
+const { v4:uuidv4 } = require('uuid');
 const serveLanding = (req, res) => {
     data = {
         username: req.session.user.name,
@@ -8,6 +9,10 @@ const serveLanding = (req, res) => {
         created_at: req.session.user.createdAt
     }
     res.render('room_landing', {data: data});
+}
+
+const generateRoom = async (req, res) => {
+    res.redirect(`/room/${uuidv4()}`);
 }
 
 const joinRoom = async (req, res) => {
@@ -24,5 +29,6 @@ const joinRoom = async (req, res) => {
 
 module.exports = {
     serveLanding,
-    joinRoom,
+    generateRoom,
+    joinRoom
 }

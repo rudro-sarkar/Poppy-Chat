@@ -48,6 +48,7 @@ const io = require("socket.io")(server);
 // Creating general namespace & managing events
 const gsp = io.of('/general'); // general namespace
 const msp = io.of('/messaging'); // messaging namespace
+const room_socket = io.of('/room'); // room namespace
 
 // Updating user status on connection & disconnect
 gsp.on('connection', async socket => {
@@ -97,10 +98,11 @@ msp.on('connection', async socket => {
 
 });
 
+room_socket.on('connection', socket => {
+    console.log('client connected');
+});
+
 // Starting the server
 server.listen(config.port, () => {
     console.log(`Server is now listening on port ${config.port}`);
 });
-
-
-//Attention: Once created, this room cannot be recovered if the link is lost or shared. We do not store room information in our database. Please keep the room link secure and share it only with trusted individuals.

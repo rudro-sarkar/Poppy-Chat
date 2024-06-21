@@ -8,6 +8,8 @@ const share_screen_btn = document.getElementById("share_screen_btn");
 
 let media_stream;
 
+const room_io = io('/room');
+
 let client_media_status = {
     is_muted: false,
     is_camera_off: false

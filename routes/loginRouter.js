@@ -43,6 +43,7 @@ login_router.post('/declinerequest/:poppy_id', authMiddeware.session_route_mgmt,
 login_router.get('/conversation/:receiver_id', authMiddeware.session_route_mgmt, conversationController.initiateConversation);
 
 login_router.get('/room', authMiddeware.session_route_mgmt, roomController.serveLanding);
+login_router.get('/generateroom', authMiddeware.session_route_mgmt, roomController.generateRoom);
 login_router.get('/room/:room_id', authMiddeware.session_route_mgmt, roomController.joinRoom);
 
 module.exports = login_router;
