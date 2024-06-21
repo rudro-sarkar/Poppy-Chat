@@ -98,6 +98,12 @@ const get_client_video_stream = (constraints) => {
     }
 }
 
+const stop_current_media_stream = () => {
+    media_stream.getTracks().forEach(track => {
+        track.stop();
+    });
+}
+
 const get_client_screen_stream = () => {
     const screen_constraints = {
         video: {
@@ -143,6 +149,7 @@ camera_select_dropdown.addEventListener('input', e => {
             facingMode: selected_mode
         }
     }
+    stop_current_media_stream();
     get_client_video_stream(selected_constraints);
 });
 
