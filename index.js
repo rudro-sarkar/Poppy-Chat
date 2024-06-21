@@ -103,31 +103,4 @@ server.listen(config.port, () => {
 });
 
 
-//dove code
-
-// const userModel = require('./models/user');
-// const msgsModel = require('./models/msg');
-
-// userModel.insertMany([
-//     {
-//         name: 'rudro',
-//         poppy_id: 'hjj',
-//         email: 'dj@gg',
-//         password: 'passgen',
-//         status: 'who',
-//         friends_list: ['a', 'c'],
-//         request_list: []
-//     }
-// ]);
-
-// msgsModel.insertMany([
-//     {
-//         sender_id: 'rudro',
-//         receiver_id: 'aronno',
-//         content: 'hello vai i miss u'
-//     }
-// ]);
-
-//dove : latest doc of database
-// let document = await userModel.findOne({ poppy_id: req.session.user.poppy_id }, { sort: {created_at: -1} });
-// console.log(document);
+//Attention: Once created, this room cannot be recovered if the link is lost or shared. We do not store room information in our database. Please keep the room link secure and share it only with trusted individuals.

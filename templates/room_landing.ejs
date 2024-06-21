@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("../partials/head.ejs") %>
+
+        <title>Rooms | <%= data.username %>
+        </title>
+</head>
+
+<body>
+
+    <div class="bg-gray-100">
+
+        <div class="h-screen w-screen flex overflow-hidden bg-white">
+            <!-- Sidebar -->
+            <%- include("../partials/sidebar.ejs") %>
+                <!-- Content -->
+                <div class="flex-1 flex flex-col overflow-hidden">
+                    <!-- Navbar -->
+                    <div class="bg-white shadow">
+                        <div class="container mx-auto">
+                            <div class="flex justify-between items-center py-4 px-2">
+                                <button class="text-gray-500 hover:text-gray-600" id="open-sidebar">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                </button>
+                                <div class="w-2/6 flex justify-end items-center">
+                                    <div class="flex justify-around items-center w-32 h-8">
+                                        <img class="w-7 h-7 rounded-full" src="/resources/profile_pic.jpg">
+                                        <h1 class="font-semibold">
+                                            <%= data.username %>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Content Body -->
+                    <div class="flex-1 overflow-auto p-4 bg-white">
+
+                        <section class="text-gray-600 body-font">
+                            <div class="container mx-auto flex flex-col px-5 py-24 justify-center items-center">
+                                <div class="w-full md:w-2/3 flex flex-col mb-16 items-center text-center">
+                                    <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
+                                        Create or Join an <span class="text-red-500">Interactive</span> Room</h1>
+                                    <p class="mb-8 leading-relaxed">Create or join rooms for seamless video and audio calls, with integrated screen sharing to collaborate effectively.</p>
+                                    <div class="flex w-full justify-center items-end">
+                                        <div class="relative mr-4 lg:w-full xl:w-1/2 w-2/4 md:w-full text-left">
+                                            <label for="hero-field"
+                                                class="leading-7 text-sm text-black">Enter Room ID</label>
+                                            <input type="text" id="hero-field" name="hero-field"
+                                                class="w-full bg-gray-100 bg-opacity-50 rounded text-base text-black py-1 px-3 leading-8 border-black duration-200 ease-in-out" style="border: 1px solid;">
+                                        </div>
+                                        <button
+                                            class="inline-flex text-white bg-green-500 hover:bg-green-400  border-0 py-2 px-6 focus:outline-none rounded text-lg">Join</button>
+                                    </div>
+                                    <p class="text-sm mt-2 text-gray-500 mb-8 w-full">By Joining or Creating a room, you agree to the <a class="text-blue-600" href="/tmc">Terms and Conditions</a></p>
+                                    <div class="flex">
+                                        <button id="createOwnRoomBtn"
+                                            class="bg-gray-800 text-white inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-700 focus:outline-none">
+                                            <i class="fa-solid fa-people-group"></i>
+                                            <span class="ml-4 flex items-start flex-col leading-none">
+                                                <span class="title-font font-medium">Create own room</span>
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    </div>
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const openSidebarButton = document.getElementById('open-sidebar');
+
+        openSidebarButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && !openSidebarButton.contains(e.target)) {
+                sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        const createOwnRoomBtn = document.getElementById("createOwnRoomBtn");
+        createOwnRoomBtn.addEventListener('click', () => {
+            window.location.href = "/room/4545";
+        });
+
+    </script>
+    <%- include("../partials/gsp_client.ejs") %>
+</body>
+
+</html>

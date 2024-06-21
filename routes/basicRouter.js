@@ -14,6 +14,10 @@ basic_router.get('/bye', (req, res ) => {
     res.render('bye');
 });
 
+basic_router.get('/tmc', (req, res) => {
+    res.render('terms_conds'); 
+});
+
 // basic_router.get("*", (req, res) => {
 //     res.render('404notfound', {
 //         error_name: "Page Not Found",

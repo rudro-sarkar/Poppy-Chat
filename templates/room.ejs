@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("../partials/head.ejs") %>
+
+        <title>Rooms | <%= data.username %>
+        </title>
+</head>
+
+<body>
+
+    <div class="bg-gray-100">
+
+        <div class="h-screen w-screen flex overflow-hidden">
+            <!-- Sidebar -->
+            <%- include("../partials/sidebar.ejs") %>
+                <!-- Content -->
+                <div class="flex-1 flex flex-col overflow-hidden">
+                    <!-- Navbar -->
+                    <div class="bg-white shadow">
+                        <div class="container mx-auto">
+                            <div class="flex justify-between items-center py-4 px-2">
+                                <button class="text-gray-500 hover:text-gray-600" id="open-sidebar">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 6h16M4 12h16M4 18h16"></path>
+                                    </svg>
+                                </button>
+                                <div class="w-2/6 flex justify-end items-center">
+                                    <div class="flex justify-around items-center w-32 h-8">
+                                        <img class="w-7 h-7 rounded-full" src="/resources/profile_pic.jpg">
+                                        <h1 class="font-semibold">
+                                            <%= data.username %>
+                                        </h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Content Body -->
+                    <div class="flex-1 overflow-auto p-4">
+
+                        <div class="flex flex-grow flex-col md:flex-row">
+                            <div class="w-full md:w-3/4 bg-white p-4 flex flex-col space-y-4 relative">
+                                <div class="w-full h-64 md:h-full rounded-lg overflow-hidden">
+                                    <video id="distant_video_display" class="w-full h-full object-cover" autoplay></video>
+                                </div>
+                                <div class="absolute bottom-4 right-4 w-24 h-24 rounded-lg border-4 border-white overflow-hidden">
+                                    <video id="client_video_display" class="w-full h-full object-cover"></video>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/4 bg-gray-200 p-4 flex flex-col space-y-4">
+                                <button id="mic_toggle_btn" class="bg-red-500 text-white py-2 px-4 rounded-lg">Mute</button>
+                                <button id="video_toggle_btn" class="bg-yellow-500 text-white py-2 px-4 rounded-lg">Turn Off Camera</button>
+                                <select id="camera_select_dropdown" class="p-2 rounded-lg border border-gray-300">
+                                    <option>Select Camera</option>
+                                    <option>Camera 1</option>
+                                    <option>Camera 2</option>
+                                </select>
+                                <select id="mic_select_dropdown" class="p-2 rounded-lg border border-gray-300">
+                                    <option>Select Microphone</option>
+                                    <option>Microphone 1</option>
+                                    <option>Microphone 2</option>
+                                </select>
+                                <button id="share_screen_btn" class="bg-green-500 text-white py-2 px-4 rounded-lg">Share Screen</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+        </div>
+    </div>
+
+    </div>
+
+    <script src="/scripts/sweetalert2.min.js"></script>
+
+    <script>
+        const openSidebarButton = document.getElementById('open-sidebar');
+
+        openSidebarButton.addEventListener('click', () => {
+            const exitForbiddenToast = Swal.mixin({
+            toast: true,
+            position: "top-start",
+            showConfirmButton: false,
+            timer: 2000
+          });
+          exitForbiddenToast.fire({
+            icon: "info",
+            title: "You have to exit the room first"
+          });
+        });
+
+    </script>
+    <script src="/scripts/room_management.js"></script>
+    <%- include("../partials/gsp_client.ejs") %>
+</body>
+
+</html>

@@ -9,6 +9,7 @@ const settings_controller = require("../controllers/settingsController");
 const searchController = require("../controllers/searchController");
 const friendRequestController = require("../controllers/friend_request_controller");
 const conversationController = require("../controllers/conversation_controller");
+const roomController = require("../controllers/roomController");
 
 login_router.use(loginSession({
     secret: process.env.SECONDARY_SESSION_SECRET,
@@ -40,6 +41,9 @@ login_router.post('/confirmrequest/:poppy_id', authMiddeware.session_route_mgmt,
 login_router.post('/declinerequest/:poppy_id', authMiddeware.session_route_mgmt, friendRequestController.declineRequest);
 
 login_router.get('/conversation/:receiver_id', authMiddeware.session_route_mgmt, conversationController.initiateConversation);
+
+login_router.get('/room', authMiddeware.session_route_mgmt, roomController.serveLanding);
+login_router.get('/room/:room_id', authMiddeware.session_route_mgmt, roomController.joinRoom);
 
 module.exports = login_router;
 
