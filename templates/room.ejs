@@ -47,18 +47,30 @@
                                 <div class="w-full h-64 md:h-full rounded-lg overflow-hidden">
                                     <video id="distant_video_display" class="w-full h-full object-cover"></video>
                                 </div>
-                                <div class="absolute bottom-4 right-4 w-24 h-24 rounded-lg border-4 border-white overflow-hidden">
+                                <div
+                                    class="absolute bottom-4 right-4 w-24 h-24 rounded-lg border-4 border-white overflow-hidden">
                                     <video id="client_video_display" class="w-full h-full object-cover" muted></video>
                                 </div>
                             </div>
                             <div class="w-full md:w-1/4 bg-gray-200 p-4 flex flex-col space-y-4">
-                                <button id="mic_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-microphone-slash"></i></button>
-                                <button id="camera_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-video-slash"></i></button>
+                                <div class="w-full flex justify-around">
+                                    <button id="mic_toggle_btn"
+                                        class="bg-gray-800 text-white py-2 px-4 rounded-lg w-20"><i
+                                            class="fa-solid fa-microphone-slash"></i></button>
+                                    <button id="camera_toggle_btn"
+                                        class="bg-gray-800 text-white py-2 px-4 rounded-lg w-20"><i
+                                            class="fa-solid fa-video-slash"></i></button>
+                                </div>
                                 <select id="camera_select_dropdown" class="p-2 rounded-lg border border-gray-300">
                                     <option value="user">Front Camera</option>
                                     <option value="environment">Rear Camera</option>
-                                </select>        
-                                <button id="share_screen_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-mobile-screen"></i> Share Screen</button>
+                                </select>
+                                <div>
+                                    <button id="share_screen_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i
+                                            class="fa-solid fa-mobile-screen"></i> Share Screen</button>
+                                    <button id="copy_room_id_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i
+                                            class="fa-solid fa-hashtag"></i> Copy Room ID</button>
+                                </div>
                             </div>
                         </div>
 
@@ -76,25 +88,39 @@
 
         openSidebarButton.addEventListener('click', () => {
             const exitForbiddenToast = Swal.mixin({
-            toast: true,
-            position: "top-start",
-            showConfirmButton: false,
-            timer: 2000
-          });
-          exitForbiddenToast.fire({
-            icon: "info",
-            title: "You have to exit the room first"
-          });
+                toast: true,
+                position: "top-start",
+                showConfirmButton: false,
+                timer: 2000
+            });
+            exitForbiddenToast.fire({
+                icon: "info",
+                title: "You have to exit the room first"
+            });
         });
 
         const client_room_id = "<%= roomId %>";
+
+        copy_room_id_btn.addEventListener('click', () => {
+            navigator.clipboard.writeText(client_room_id);
+            const roomIdCopied = Swal.mixin({
+                    toast: true,
+                    position: "top-start",
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+                roomIdCopied.fire({
+                    icon: "info",
+                    title: "Room ID copied to clipboard"
+                });
+        });
 
     </script>
     <!-- <%- include("../partials/gsp_client.ejs") %> -->
     <script src="/socket.io/socket.io.js"></script>
     <script src="/scripts/room_management.js"></script>
     <script>
-        
+
     </script>
 </body>
 

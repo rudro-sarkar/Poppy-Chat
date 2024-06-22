@@ -55,7 +55,7 @@
                                             <input type="text" id="hero-field" name="hero-field"
                                                 class="w-full bg-gray-100 bg-opacity-50 rounded text-base text-black py-1 px-3 leading-8 border-black duration-200 ease-in-out" style="border: 1px solid;">
                                         </div>
-                                        <button
+                                        <button id="clientjoinRoomBtn"
                                             class="inline-flex text-white bg-green-500 hover:bg-green-400  border-0 py-2 px-6 focus:outline-none rounded text-lg">Join</button>
                                     </div>
                                     <p class="text-sm mt-2 text-gray-500 mb-8 w-full">By Joining or Creating a room, you agree to the <a class="text-blue-600" href="/tmc">Terms and Conditions</a></p>
@@ -90,6 +90,16 @@
         document.addEventListener('click', (e) => {
             if (!sidebar.contains(e.target) && !openSidebarButton.contains(e.target)) {
                 sidebar.classList.add('-translate-x-full');
+            }
+        });
+
+        const client_join_roomid_input = document.getElementById('hero-field');
+        const client_join_room_btn = document.getElementById('clientjoinRoomBtn');
+
+        client_join_room_btn.addEventListener('click', () => {
+            let client_entered_room_id = client_join_roomid_input.value;
+            if (client_entered_room_id) {
+                window.location.href = `/room/${client_entered_room_id}`;
             }
         });
 
