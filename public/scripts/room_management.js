@@ -6,7 +6,20 @@ const camera_toggle_btn = document.getElementById("camera_toggle_btn");
 const camera_select_dropdown = document.getElementById("camera_select_dropdown");
 const share_screen_btn = document.getElementById("share_screen_btn");
 
-const rtcPeerConnection = new RTCPeerConnection();
+const iceConfiguration = {}
+iceConfiguration.iceServers = [
+  {
+    urls: 'stun:stun1.l.google.com:19302'
+  },
+  {
+    urls: 'stun:stun3.l.google.com:19302'
+  },
+  {
+    urls: 'stun:stun4.l.google.com:19302'
+  }
+];
+
+const rtcPeerConnection = new RTCPeerConnection(iceConfiguration);
 
 let media_stream;
 

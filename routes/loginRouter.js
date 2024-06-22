@@ -46,5 +46,8 @@ login_router.get('/room', authMiddeware.session_route_mgmt, roomController.serve
 login_router.get('/generateroom', authMiddeware.session_route_mgmt, roomController.generateRoom);
 login_router.get('/room/:room_id', authMiddeware.session_route_mgmt, roomController.joinRoom);
 
+login_router.get('/managefriends', authMiddeware.session_route_mgmt, friendRequestController.manageFriends);
+login_router.post('/removefriend/:poppyId', authMiddeware.session_route_mgmt, friendRequestController.removeFriend);
+
 module.exports = login_router;
 

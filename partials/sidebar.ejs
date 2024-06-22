@@ -72,12 +72,6 @@
     </ul>
 </div>
 
-<!-- Preloader -->
-
-<div id="preloader" class="preloader">
-    <div class="spinner"></div>
-</div>
-
 <script>
     const contextMenu = document.getElementById('context-menu');
     const body = document.body;
@@ -113,11 +107,6 @@
 
     context_opt_settings.addEventListener('click', () => {
         window.location.href = "/settings";
-    });
-
-    window.addEventListener('load', function () {
-        const preloader = document.getElementById('preloader');
-        preloader.style.display = 'none';
     });
 
 </script>

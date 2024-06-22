@@ -28,9 +28,56 @@ const declineRequest = async (req, res) => {
     res.redirect('/requests');
 }
 
+const manageFriends = async (req, res) => {
+    const visiting_user_id = req.session.user._id;
+    const searched_data = await userModel.findOne({ _id: visiting_user_id });
+    const all_profiles = await userModel.find({ _id: { $nin: data._id } });
+    const friends_list = searched_data.friends_list;
+    const friends_count = friends_list.length;
+    const friend_list_account_details = [];
+    for (elms in all_profiles) {
+        if (friends_list.includes(all_profiles[elms].poppy_id)) {
+            let account = {
+                username: all_profiles[elms].name,
+                poppy_id: all_profiles[elms].poppy_id
+            }
+            friend_list_account_details.push(account);
+        }
+    }
+    data = {
+        username: req.session.user.name,
+        email: req.session.user.email,
+        poppy_id: req.session.user.poppy_id,
+        _id: req.session.user._id,
+        created_at: req.session.user.createdAt
+    }
+
+    const additional_data_for_client = {
+        friends_list: friend_list_account_details,
+        friends_count: friends_count
+    }
+    res.render('manage_friends', { data: data, adfc: additional_data_for_client });
+}
+
+const removeFriend = async (req, res) => {
+    const targeted_id = req.params.poppyId;
+    const userData = await userModel.findOne({ poppy_id: req.session.user.poppy_id });
+    const friends_list = userData.friends_list;
+    if (friends_list.includes(targeted_id)) {
+        await userModel.findOneAndUpdate({ poppy_id: req.session.user.poppy_id }, { $pull: { friends_list: targeted_id } });
+        await userModel.findOneAndUpdate({ poppy_id: targeted_id }, { $pull: { friends_list: req.session.user.poppy_id } });
+        res.redirect('/managefriends');
+    }else {
+        res.redirect('/managefriends');
+    }
+
+}
+
 module.exports = {
     inspectProfile,
     confirmRequest,
     declineRequest,
+    manageFriends,
+    removeFriend
 }
 
