@@ -182,13 +182,13 @@
             msp_socket.emit('initiate_conversation', "<%= receiver %>");
 
             msgSend.addEventListener('click', () => {
-                let msg = msgInput.value;
+                let msg = msgInput.value.trim();
                 sendMsgToOtherEnd(msg);
                 msgInput.value = "";
             });
             msgInput.addEventListener('keyup', e => {
                 if (e.keyCode === 13 && e.shiftKey === false) {
-                    let msg = msgInput.value;
+                    let msg = msgInput.value.trim();
                     sendMsgToOtherEnd(msg);
                     msgInput.value = "";
                 }

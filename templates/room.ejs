@@ -52,10 +52,10 @@
                                 </div>
                             </div>
                             <div class="w-full md:w-1/4 bg-gray-200 p-4 flex flex-col space-y-4">
-                                <button id="mic_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-microphone"></i></button>
-                                <button id="camera_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-video"></i></button>
+                                <button id="mic_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-microphone-slash"></i></button>
+                                <button id="camera_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-video-slash"></i></button>
                                 <select id="camera_select_dropdown" class="p-2 rounded-lg border border-gray-300">
-                                    <option value="user">Font Camera</option>
+                                    <option value="user">Front Camera</option>
                                     <option value="environment">Rear Camera</option>
                                 </select>        
                                 <button id="share_screen_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-mobile-screen"></i> Share Screen</button>
@@ -86,6 +86,8 @@
             title: "You have to exit the room first"
           });
         });
+
+        const client_room_id = "<%= roomId %>";
 
     </script>
     <!-- <%- include("../partials/gsp_client.ejs") %> -->

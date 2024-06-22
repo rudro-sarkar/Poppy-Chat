@@ -24,7 +24,7 @@ const joinRoom = async (req, res) => {
         _id: req.session.user._id,
         created_at: req.session.user.createdAt
     }
-    res.render('room', {data: data});
+    res.render('room', {data: data, roomId: room_id});
 }
 
 module.exports = {

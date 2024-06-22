@@ -6,14 +6,18 @@ const camera_toggle_btn = document.getElementById("camera_toggle_btn");
 const camera_select_dropdown = document.getElementById("camera_select_dropdown");
 const share_screen_btn = document.getElementById("share_screen_btn");
 
+const rtcPeerConnection = new RTCPeerConnection();
+
 let media_stream;
 
 const room_io = io('/room');
 
 let client_media_status = {
-    is_muted: false,
-    is_camera_off: false
+    is_muted: true,
+    is_camera_off: true
 }
+
+let client_screen_sharing = false;
 
 
 mic_toggle_btn.addEventListener('click', () => {
@@ -54,6 +58,16 @@ const get_client_video_stream = (constraints) => {
             .then((stream) => {
                 media_stream = stream;
                 client_video_display.srcObject = media_stream;
+
+                attach_track_to_peer(media_stream);
+
+                // disable mic & cam on first time joining
+                media_stream.getAudioTracks().forEach(track => {
+                    track.enabled = false;
+                });
+                media_stream.getVideoTracks().forEach(track => {
+                    track.enabled = false;
+                });
 
                 client_video_display.addEventListener('loadedmetadata', () => {
                     client_video_display.play().then(() => {
@@ -100,6 +114,47 @@ const get_client_video_stream = (constraints) => {
     }
 }
 
+const create_rtc_offer = () => {
+    rtcPeerConnection.createOffer().then(offer => {
+        rtcPeerConnection.setLocalDescription(offer);
+        // sending offer through socket
+        room_io.emit('client_send_rtc_offer', offer, client_room_id);
+
+    }).catch(() => {
+        const noOfferToast = Swal.mixin({
+            toast: true,
+            position: "top-start",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+        noOfferToast.fire({
+            icon: "error",
+            title: "Cannot offer connection request!"
+        });
+    });
+}
+
+const attach_track_to_peer = (md_stream) => {
+    md_stream.getTracks().forEach(track => {
+        rtcPeerConnection.addTrack(track, md_stream);
+    });
+    create_rtc_offer();
+
+    // ICE-Candidate event management
+    rtcPeerConnection.addEventListener('icecandidate', data => {
+        room_io.emit('send_candidate', data.candidate, client_room_id);
+    });
+
+    rtcPeerConnection.addEventListener('addstream', data => {
+        distant_video_display.srcObject = data.stream;
+        distant_video_display.addEventListener('loadedmetadata', () => {
+            distant_video_display.play();
+        });
+    });
+
+}
+
 const stop_current_media_stream = () => {
     media_stream.getTracks().forEach(track => {
         track.stop();
@@ -108,11 +163,11 @@ const stop_current_media_stream = () => {
 
 const get_client_screen_stream = () => {
     const screen_constraints = {
-        video: {
-            displaySurface: "browser",
-        },
         audio: {
             suppressLocalAudioPlayback: false,
+        },
+        video: {
+            displaySurface: "browser",
         },
         preferCurrentTab: false,
         selfBrowserSurface: "exclude",
@@ -124,8 +179,11 @@ const get_client_screen_stream = () => {
         media_stream = stream;
         client_video_display.srcObject = media_stream;
 
+        attach_track_to_peer(media_stream);
+
         client_video_display.addEventListener('loadedmetadata', () => {
             client_video_display.play().then(() => {
+                client_screen_sharing = true;
             }).catch(() => {
                 const noScrStartToast = Swal.mixin({
                     toast: true,
@@ -155,7 +213,13 @@ camera_select_dropdown.addEventListener('input', e => {
     get_client_video_stream(selected_constraints);
 });
 
-share_screen_btn.addEventListener('click', get_client_screen_stream);
+share_screen_btn.addEventListener('click', () => {
+    if (client_screen_sharing) {
+        stop_current_media_stream();
+    } else {
+        get_client_screen_stream();
+    }
+});;
 
 let default_constraints = {
     audio: true,
@@ -165,3 +229,41 @@ let default_constraints = {
 };
 
 get_client_video_stream(default_constraints);
+
+// socket io event emission
+room_io.emit('client_joined', client_room_id);
+
+room_io.on('new_client_joined', () => {
+
+});
+
+// receiving client's offer from server
+room_io.on('client_receive_rtc_offer', offer => {
+    // setting session to remote description of client
+    rtcPeerConnection.setRemoteDescription(offer);
+    // creating answer upon offer
+    rtcPeerConnection.createAnswer().then(answer => {
+        rtcPeerConnection.setLocalDescription(answer);
+        // sending the answer
+        room_io.emit('client_send_rtc_answer', answer, client_room_id);
+    });
+});
+
+// receiving client's answer from server
+room_io.on('client_receive_rtc_answer', answer => {
+    // setting session to remote description of client
+    rtcPeerConnection.setRemoteDescription(answer);
+});
+
+// receiving ice-candidate from server
+room_io.on('client_receive_candidate', candidate => {
+    rtcPeerConnection.addIceCandidate(candidate);
+});
+
+// stoping media stream & disclosing peer connection upon refresh
+window.addEventListener('beforeunload', e => {
+    stop_current_media_stream();
+});
+
+
+

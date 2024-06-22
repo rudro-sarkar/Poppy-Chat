@@ -99,7 +99,26 @@ msp.on('connection', async socket => {
 });
 
 room_socket.on('connection', socket => {
-    console.log('client connected');
+
+    socket.on('client_joined', roomId => {
+        socket.join(roomId);
+        // broadcasting joining event to existing room members
+        socket.to(roomId).emit('new_client_joined');
+        // receiving client's offer
+        socket.on('client_send_rtc_offer', (offer, room_id) => {
+            socket.to(room_id).emit('client_receive_rtc_offer', offer);
+        });
+        // receiving client's answer
+        socket.on('client_send_rtc_answer', (answer, room_id) => {
+            socket.to(room_id).emit('client_receive_rtc_answer', answer);
+        });
+        // receiving ice-candidate
+        socket.on('send_candidate', (candidate, room_id) => {
+            socket.to(room_id).emit('client_receive_candidate', candidate);
+        });
+
+    });
+
 });
 
 // Starting the server
