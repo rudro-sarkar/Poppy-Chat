@@ -18,12 +18,8 @@ basic_router.get('/tmc', (req, res) => {
     res.render('terms_conds'); 
 });
 
-// basic_router.get("*", (req, res) => {
-//     res.render('404notfound', {
-//         error_name: "Page Not Found",
-//         error_code: 404,
-//         error_msg: "Sorry, the page you're looking for can't be found."
-//     });
-// });
+basic_router.get('/termsndconds', (req, res) => {
+    res.render('terms_conds.ejs');
+});
 
 module.exports = basic_router;

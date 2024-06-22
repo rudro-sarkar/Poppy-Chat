@@ -4,7 +4,7 @@
 <head>
     <%- include("../partials/head.ejs") %>
 
-        <title><%= error_name %> - Poppy Chat</title>
+        <title>Error - Poppy Chat</title>
 </head>
 
 <body>
@@ -13,9 +13,9 @@
         <div class="container flex flex-col items-center ">
             <div class="flex flex-col gap-6 max-w-md text-center">
                 <h2 class="font-extrabold text-9xl text-red-500 dark:text-gray-100">
-                    <span class="sr-only">Error</span><%= error_code %>
+                    <span class="sr-only">Error</span>404
                 </h2>
-                <p class="text-2xl md:text-3xl dark:text-gray-300"><%= error_msg %></p>
+                <p class="text-2xl md:text-3xl dark:text-gray-300">Requested Page Was Not Found!</p>
                 <a href="/"
                     class="px-8 py-4 text-xl font-semibold rounded bg-gray-800 text-gray-50 hover:bg-gray-900" title="Head Back To Home"><i class="fa-solid fa-arrow-left"></i> Back
                     to home</a>

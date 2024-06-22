@@ -39,6 +39,11 @@ app.use(basic_router);
 app.use(auth_router);
 app.use(login_router);
 
+// Serving error page if user hits an unknown route
+app.get("*", (req, res) => {
+    res.render("404notfound");
+});
+
 // Creating the server
 const server = http.createServer(app);
 

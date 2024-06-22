@@ -1,7 +1,11 @@
 
+const userModel = require("../models/user");
+
 const initiateConversation = async (req, res) => {
     const receiver_id = req.params.receiver_id;
-    let friend_list = req.session.user.friends_list;
+    let user_data = await userModel.findOne({ _id: req.session.user._id });
+    // let friend_list = req.session.user.friends_list; // prblm initiating cnv with new frnd
+    let friend_list = user_data.friends_list;
     if (friend_list.includes(receiver_id)) {
         const data = {
             username: req.session.user.name,

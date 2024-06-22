@@ -4,39 +4,124 @@
     <div class="p-4">
         <h1 class="text-2xl font-semibold"><span class="text-red-500">Poppy</span> Chat</h1>
         <ul class="mt-8">
-            <div id="inbox_select_div" class="cursor-pointer flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+            <div id="inbox_select_div"
+                class="cursor-pointer flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                 &nbsp;
                 <i class="fa-solid fa-inbox"></i>
-                <li class=""><p>Inbox</p></li>
+                <li class="">
+                    <p>Inbox</p>
+                </li>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
-            <div id="explore_select_div" class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+            <div id="explore_select_div"
+                class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                 &nbsp;
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <li class=""><p>Explore</p></li>
+                <li class="">
+                    <p>Explore</p>
+                </li>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
-            <div id="requests_select_div" class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+            <div id="requests_select_div"
+                class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                 &nbsp;
                 <i class="fa-solid fa-bell"></i>
-                <li class=""><p>Requests</p></li>
+                <li class="">
+                    <p>Requests</p>
+                </li>
                 &nbsp;&nbsp;&nbsp;&nbsp;
             </div>
-            <div id="rooms_select_div" class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+            <div id="rooms_select_div"
+                class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                 &nbsp;
                 <i class="fa-solid fa-compact-disc"></i>
-                <li class=""><p>Room</p></li>
+                <li class="">
+                    <p>Room</p>
+                </li>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
-            <div id="settings_select_div" class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
+            <div id="settings_select_div"
+                class="cursor-pointer mt-4 flex justify-between items-center w-full h-12 rounded hover:bg-gray-900">
                 &nbsp;
                 <i class="fa-solid fa-gear"></i>
-                <li class=""><p>Settings</p></li>
+                <li class="">
+                    <p>Settings</p>
+                </li>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </div>
         </ul>
     </div>
 </div>
+
+<!-- context menu -->
+<div id="context-menu" class="context-menu absolute shadow-lg rounded-lg py-2">
+    <div class="px-4 py-2 text-gray-700 font-semibold border-b border-gray-200">Poppy Chat V 1.0</div>
+    <ul class="list-none p-0 m-0">
+        <li id="context_opt_refresh"
+            class="flex items-center px-4 py-2 hover:bg-gray-800 hover:text-white cursor-pointer">
+            <i class="fa-solid fa-arrows-rotate"></i>&nbsp;Refresh
+        </li>
+        <li id="context_opt_inbox"
+            class="flex items-center px-4 py-2 hover:bg-gray-800 hover:text-white cursor-pointer">
+            <i class="fa-solid fa-inbox"></i>&nbsp;Inbox
+        </li>
+        <li id="context_opt_settings"
+            class="flex items-center px-4 py-2 hover:bg-gray-800 hover:text-white cursor-pointer">
+            <i class="fa-solid fa-gear"></i>&nbsp;Settings
+        </li>
+    </ul>
+</div>
+
+<!-- Preloader -->
+
+<div id="preloader" class="preloader">
+    <div class="spinner"></div>
+</div>
+
+<script>
+    const contextMenu = document.getElementById('context-menu');
+    const body = document.body;
+
+    function showContextMenu(e) {
+        e.preventDefault();
+        const x = e.pageX + 'px';
+        const y = e.pageY + 'px';
+        contextMenu.style.top = y;
+        contextMenu.style.left = x;
+        contextMenu.style.display = 'block';
+    }
+
+    body.addEventListener('contextmenu', showContextMenu);
+
+    body.addEventListener('dblclick', showContextMenu);
+
+    body.addEventListener('click', function () {
+        contextMenu.style.display = 'none';
+    });
+
+    const context_opt_refresh = document.getElementById("context_opt_refresh");
+    const context_opt_inbox = document.getElementById("context_opt_inbox");
+    const context_opt_settings = document.getElementById("context_opt_settings");
+
+    context_opt_refresh.addEventListener('click', () => {
+        window.location.reload();
+    });
+
+    context_opt_inbox.addEventListener('click', () => {
+        window.location.href = "/inbox";
+    });
+
+    context_opt_settings.addEventListener('click', () => {
+        window.location.href = "/settings";
+    });
+
+    window.addEventListener('load', function () {
+        const preloader = document.getElementById('preloader');
+        preloader.style.display = 'none';
+    });
+
+</script>
+
 
 <script>
 
