@@ -42,7 +42,7 @@
                     <!-- Content Body -->
                     <div class="flex-1 overflow-auto p-4">
 
-                        <div class="flex flex-grow flex-col md:flex-row">
+                        <!-- <div class="flex flex-grow flex-col md:flex-row">
                             <div class="w-full md:w-3/4 bg-white p-4 flex flex-col space-y-4 relative">
                                 <div class="w-full h-64 md:h-full rounded-lg overflow-hidden">
                                     <video id="distant_video_display" class="w-full h-full object-cover"></video>
@@ -65,14 +65,53 @@
                                     <option value="user">Front Camera</option>
                                     <option value="environment">Rear Camera</option>
                                 </select>
-                                <div>
+                                <div class="w-full flex justify-around">
                                     <button id="share_screen_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i
                                             class="fa-solid fa-mobile-screen"></i> Share Screen</button>
                                     <button id="copy_room_id_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg"><i
                                             class="fa-solid fa-hashtag"></i> Copy Room ID</button>
                                 </div>
+                                <button id="client_room_exit_btn" class="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded-lg"><i class="fa-solid fa-person-walking-dashed-line-arrow-right"></i> Exit Room</button>
+                            </div>
+                        </div> -->
+
+                        <div class="flex flex-grow flex-col md:flex-row">
+                            <div class="w-full md:w-3/4 p-4 flex flex-wrap space-x-4 space-y-4 relative">
+                                <div id="remote_video_div" class="user-videos w-full flex flex-wrap">
+                                    <!-- Placeholder for user video elements -->                                                       
+                                </div>
+                                <div class="absolute bottom-4 right-4 w-24 h-24 rounded-lg border-4 border-white overflow-hidden">
+                                    <video id="client_video_display" class="w-full h-full object-cover" muted></video>
+                                </div>
+                            </div>
+                            <div class="w-full md:w-1/4 bg-gray-200 p-4 flex flex-col space-y-4">
+                                <div class="w-full flex justify-around">
+                                    <button id="mic_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg w-20">
+                                        <i class="fa-solid fa-microphone-slash"></i>
+                                    </button>
+                                    <button id="camera_toggle_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg w-20">
+                                        <i class="fa-solid fa-video-slash"></i>
+                                    </button>
+                                </div>
+                                <select id="camera_select_dropdown" class="p-2 rounded-lg border border-gray-300">
+                                    <option value="user">Front Camera</option>
+                                    <option value="environment">Rear Camera</option>
+                                </select>
+                                <div class="w-full flex justify-around">
+                                    <button id="share_screen_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg">
+                                        <i class="fa-solid fa-mobile-screen"></i> Share Screen
+                                    </button>
+                                    <button id="copy_room_id_btn" class="bg-gray-800 text-white py-2 px-4 rounded-lg">
+                                        <i class="fa-solid fa-hashtag"></i> Copy Room ID
+                                    </button>
+                                </div>
+                                <button id="client_room_exit_btn" class="bg-red-500 hover:bg-red-400 text-white py-2 px-4 rounded-lg">
+                                    <i class="fa-solid fa-person-walking-dashed-line-arrow-right"></i> Exit Room
+                                </button>
                             </div>
                         </div>
+                        
+                        
 
                     </div>
                 </div>
@@ -113,6 +152,11 @@
                     icon: "info",
                     title: "Room ID copied to clipboard"
                 });
+        });
+
+        const client_room_exit_btn = document.getElementById("client_room_exit_btn");
+        client_room_exit_btn.addEventListener('click', () => {
+            window.location.href = "/room";
         });
 
     </script>

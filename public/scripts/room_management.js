@@ -1,14 +1,19 @@
 
-const distant_video_display = document.getElementById('distant_video_display');
+// const distant_video_display = document.getElementById('distant_video_display');
 const client_video_display = document.getElementById('client_video_display');
 const mic_toggle_btn = document.getElementById("mic_toggle_btn");
 const camera_toggle_btn = document.getElementById("camera_toggle_btn");
 const camera_select_dropdown = document.getElementById("camera_select_dropdown");
 const share_screen_btn = document.getElementById("share_screen_btn");
+const remote_video_div = document.getElementById("remote_video_div");
 
 const rtcPeerConnection = new RTCPeerConnection();
 
 let media_stream;
+
+let is_client_streaming_first_time = true;
+
+let is_client_started_media_stream = false;
 
 const room_io = io('/room');
 
@@ -62,12 +67,15 @@ const get_client_video_stream = (constraints) => {
                 attach_track_to_peer(media_stream);
 
                 // disable mic & cam on first time joining
-                media_stream.getAudioTracks().forEach(track => {
-                    track.enabled = false;
-                });
-                media_stream.getVideoTracks().forEach(track => {
-                    track.enabled = false;
-                });
+                if (is_client_streaming_first_time) {
+                    media_stream.getAudioTracks().forEach(track => {
+                        track.enabled = false;
+                    });
+                    media_stream.getVideoTracks().forEach(track => {
+                        track.enabled = false;
+                    });
+                    is_client_streaming_first_time = false;
+                }
 
                 client_video_display.addEventListener('loadedmetadata', () => {
                     client_video_display.play().then(() => {
@@ -144,13 +152,28 @@ const attach_track_to_peer = (md_stream) => {
     // ICE-Candidate event management
     rtcPeerConnection.addEventListener('icecandidate', data => {
         room_io.emit('send_candidate', data.candidate, client_room_id);
+        is_client_started_media_stream = false;
     });
 
     rtcPeerConnection.addEventListener('addstream', data => {
-        distant_video_display.srcObject = data.stream;
-        distant_video_display.addEventListener('loadedmetadata', () => {
-            distant_video_display.play();
-        });
+        // distant_video_display.srcObject = data.stream;
+
+        // distant_video_display.addEventListener('loadedmetadata', () => {
+        //     distant_video_display.play();
+        // });
+
+        if (!is_client_started_media_stream) {
+            const videoElement = document.createElement('video');
+            videoElement.classList.add('w-24', 'h-24', 'rounded-lg', 'border-4', 'border-white', 'overflow-hidden');
+            videoElement.srcObject = data.stream;
+            remote_video_div.appendChild(videoElement);
+    
+            videoElement.addEventListener('loadedmetadata', () => {
+                videoElement.play();
+            });
+            is_client_started_media_stream = true;
+        }
+
     });
 
 }
