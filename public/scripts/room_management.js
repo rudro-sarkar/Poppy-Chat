@@ -6,13 +6,21 @@ const camera_toggle_btn = document.getElementById("camera_toggle_btn");
 const camera_select_dropdown = document.getElementById("camera_select_dropdown");
 const share_screen_btn = document.getElementById("share_screen_btn");
 
+let rtcPeerConnection;
+
 const iceConfiguration = {}
 
-(async() => {
-  const response = await fetch("https://poppychat.metered.live/api/v1/turn/credentials?apiKey=c479684e6e235a971e98fe825794d7505026");
-  const iceServers = await response.json();
-  iceConfiguration.iceServers = iceServers
-})();
+const get_turn_server = () => {
+  fetch("https://poppychat.metered.live/api/v1/turn/credentials?apiKey=c479684e6e235a971e98fe825794d7505026").then(response => {   
+      const iceServers = response.json();
+      iceConfiguration.iceServers = iceServers;
+      rtcPeerConnection = new RTCPeerConnection(iceConfiguration);
+  }).catch(err => {
+      console.log(err);
+  });
+}
+
+get_turn_server();
 
 // iceConfiguration.iceServers = [
 //   {
@@ -24,8 +32,6 @@ const iceConfiguration = {}
 //     credential: 'openrelayproject'
 //   }
 // ];
-
-const rtcPeerConnection = new RTCPeerConnection(iceConfiguration);
 
 let media_stream;
 
