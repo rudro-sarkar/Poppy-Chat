@@ -7,16 +7,23 @@ const camera_select_dropdown = document.getElementById("camera_select_dropdown")
 const share_screen_btn = document.getElementById("share_screen_btn");
 
 const iceConfiguration = {}
-iceConfiguration.iceServers = [
-  {
-    urls: 'stun:stun1.l.google.com:19302'
-  },
-  {
-    urls: 'turn:openrelay.metered.ca:80',
-    username: 'openrelayproject',
-    credential: 'openrelayproject'
-  }
-];
+
+(async() => {
+  const response = await fetch("https://poppychat.metered.live/api/v1/turn/credentials?apiKey=c479684e6e235a971e98fe825794d7505026");
+  const iceServers = await response.json();
+  iceConfiguration.iceServers = iceServers
+})();
+
+// iceConfiguration.iceServers = [
+//   {
+//     urls: 'stun:stun1.l.google.com:19302'
+//   },
+//   {
+//     urls: 'turn:openrelay.metered.ca:80',
+//     username: 'openrelayproject',
+//     credential: 'openrelayproject'
+//   }
+// ];
 
 const rtcPeerConnection = new RTCPeerConnection(iceConfiguration);
 
